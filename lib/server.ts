@@ -68,7 +68,7 @@ export function checkOrigin(req: Request) {
   if (req.headers.get("origin") !== new URL(c.APP_URL).origin)
     throw new HttpError(403, "ORIGIN_DENIED", "Origin tidak diizinkan.");
 }
-export async function body(req: Request) {
+export async function body(req: Request, maxBytes = 65536) {
   const reader = req.body?.getReader();
   if (!reader) throw new HttpError(400, "INVALID_INPUT", "Body JSON wajib.");
   const chunks: Uint8Array[] = [];
@@ -77,9 +77,13 @@ export async function body(req: Request) {
     const { value, done } = await reader.read();
     if (done) break;
     size += value.byteLength;
-    if (size > 65536) {
+    if (size > maxBytes) {
       await reader.cancel();
-      throw new HttpError(413, "BODY_TOO_LARGE", "Maksimal 64 KiB.");
+      throw new HttpError(
+        413,
+        "BODY_TOO_LARGE",
+        "Ukuran payload melebihi batas.",
+      );
     }
     chunks.push(value);
   }
@@ -96,6 +100,15 @@ export function dbError(error: { code?: string; message?: string } | null) {
       409,
       "REVISION_CONFLICT",
       "Data berubah. Muat ulang dan tinjau perubahan sebelum menyimpan.",
+    );
+  if (
+    error.code &&
+    ["22023", "22007", "22008", "22P02", "23514"].includes(error.code)
+  )
+    throw new HttpError(
+      400,
+      "INVALID_INPUT",
+      "Data riset tidak valid atau belum cocok dengan inventaris. Periksa format, identitas dan total snapshot.",
     );
   if (error.code === "42501")
     throw new HttpError(403, "FORBIDDEN", "Akses ditolak.");

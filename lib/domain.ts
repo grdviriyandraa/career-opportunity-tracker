@@ -28,7 +28,12 @@ export const publicUrl = z
   .url()
   .max(2048)
   .refine((v) => {
-    const u = new URL(v);
+    let u: URL;
+    try {
+      u = new URL(v);
+    } catch {
+      return false;
+    }
     return (
       ["http:", "https:"].includes(u.protocol) && !u.username && !u.password
     );

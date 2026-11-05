@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ResearchReview } from "@/components/research-review";
 import { ArrowUpRight } from "@/components/icons";
 import { z } from "zod";
 import { notFound } from "next/navigation";
@@ -21,7 +22,7 @@ export default async function Detail({
   const g = await gate();
   if (g.screen) return g.screen;
   const db = g.session!.db;
-  const [result, milestones, history] = await Promise.all([
+  const [result, milestones, history, proposals] = await Promise.all([
     db.from("opportunities").select("*").eq("id", id).maybeSingle(),
     db.from("milestones").select("*").eq("opportunity_id", id).order("date"),
     db
@@ -30,7 +31,14 @@ export default async function Detail({
       .eq("opportunity_id", id)
       .order("created_at", { ascending: false })
       .limit(50),
+    db
+      .from("research_proposals")
+      .select("*")
+      .eq("opportunity_id", id)
+      .eq("status", "pending")
+      .limit(21),
   ]);
+  if (proposals.error) return <DatabaseFailure />;
   if (result.error || milestones.error || history.error)
     return <DatabaseFailure />;
   if (!result.data) notFound();
@@ -61,6 +69,18 @@ export default async function Detail({
           tindakan melamar.
         </p>
       </section>
+      {proposals.data?.slice(0, 20).map((p) => (
+        <ResearchReview
+          key={p.id + ":" + item.revision}
+          proposal={p}
+          item={item}
+        />
+      ))}
+      {(proposals.data?.length ?? 0) > 20 && (
+        <p className="muted">
+          Menampilkan 20 usulan. Usulan berikutnya muncul setelah review.
+        </p>
+      )}
       <EditOpportunity key={item.revision} item={item} />
       <Milestones items={milestones.data as Milestone[]} />
       <AddMilestone
@@ -78,7 +98,13 @@ export default async function Detail({
                 ? "Draft disimpan"
                 : h.operation === "update"
                   ? "Detail / progres diperbarui"
-                  : "Milestone ditambahkan"}
+                  : h.operation === "milestone_added"
+                    ? "Milestone ditambahkan"
+                    : h.operation === "research_capture"
+                      ? "Peluang diimpor dari riset"
+                      : h.operation === "research_public_approved"
+                        ? "Fakta sumber disetujui"
+                        : h.operation}
             </span>
             <time>
               {new Intl.DateTimeFormat("id-ID", {

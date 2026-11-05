@@ -2,7 +2,7 @@
 
 Aplikasi pribadi Bahasa Indonesia untuk menyimpan peluang Jobs, Bootcamps dan Competitions. Implementasi awal menyediakan tujuh menu, email OTP owner, capture draft, daftar/pencarian, detail, update progres, arsip, milestone internal dan audit transaksional.
 
-**Status:** fondasi dan alur inti sedang diuji. Google Calendar/Sheets, riwayat riset, recovery, recurrence, agent API, MCP dan live Telegram belum tersedia. Baca [STATUS.md](STATUS.md). Source di `reference_partial_source/` adalah arsip parsial yang tidak runnable, bukan aplikasi ini.
+**Status:** fondasi dan alur inti sedang diuji. Impor manual dengan preview, riwayat riset per run, dan review field publik tersedia. Koneksi Google Calendar/Sheets, recovery, recurrence, agent API, MCP dan live Telegram belum tersedia. Baca [STATUS.md](STATUS.md). Source di `reference_partial_source/` adalah arsip parsial yang tidak runnable, bukan aplikasi ini.
 
 ## Menjalankan
 
@@ -20,7 +20,7 @@ Jangan overwrite `.env.local` yang sudah ada. Aplikasi menampilkan panduan setup
 ## Supabase dan owner
 
 1. Buat project Supabase development terpisah dari produksi.
-2. Jalankan `supabase/migrations/202611050001_core.sql` melalui SQL editor/admin migration connection. Jangan memasukkan admin/database credentials ke browser.
+2. Jalankan semua file SQL dalam `supabase/migrations/` sesuai urutan nama melalui SQL editor/admin migration connection; lewati migrasi yang sudah diterapkan. Jangan memasukkan admin/database credentials ke browser.
 3. Provision satu akun owner dari Supabase Dashboard. Nonaktifkan public signup. Catat UUID akun yang terverifikasi.
 4. Dari SQL editor, provision profile (ganti placeholder dengan UUID akun tersebut):
 
@@ -79,3 +79,9 @@ Stop dev/start dengan Ctrl-C; proses harus dijalankan ulang pada task baru. Data
 Dokumen historis pada root yang sudah ada sebelum implementasi dapat mengandung informasi pribadi. Jangan mem-publish ulang paket handoff mentah atau data tracker. Commit source baru secara selektif; jangan gunakan `git add .` tanpa review. Penghapusan dokumen dari commit baru tidak membersihkan riwayat Git existing.
 
 Google OAuth, scheduler/cutover legacy, Sheets, agent grants/MCP, Windows Ollama dan bot private-owner mengikuti backlog berikutnya. Belum ada token agent atau koneksi eksternal yang dibuat; tidak ada deployment produksi, merge ke main, atau push otomatis.
+
+## Riwayat riset
+
+Inbox menyimpan snapshot immutable per run, membedakan baru/lama diperiksa/carry-forward, serta menampilkan waktu riset terpisah dari waktu impor. Overview memakai snapshot terakhir yang benar-benar tersimpan, bukan jumlah baris hasil pencarian. Impor JSON manual selalu melalui preview server-held; fakta sumber existing menjadi usulan dan progres pribadi dipertahankan. Review detail dapat menerapkan field publik terpilih dengan revision check.
+
+Baca [format impor dan batasnya](docs/RESEARCH_IMPORT.md) serta [konfigurasi yang diperlukan](docs/INPUTS_REQUIRED.md). Paket sintetis hanya dipakai di tests; tidak ada data riset privat yang dimuat otomatis. Koneksi Google Sheets live dan penerapan koreksi run belum tersedia.

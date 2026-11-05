@@ -20,6 +20,8 @@ describe("identity and capture", () => {
       captureSchema.safeParse({ title: "A", owner_id: "spoof" }).success,
     ).toBe(false);
     expect(captureSchema.safeParse({}).success).toBe(false);
+    for (const url of ["", "not-a-url", "https://"])
+      expect(captureSchema.safeParse({ source_url: url }).success).toBe(false);
     expect(
       captureSchema.safeParse({ source_url: "https://user:pass@example.com" })
         .success,

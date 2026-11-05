@@ -4,7 +4,7 @@ export default defineConfig({
   testMatch: "setup.spec.ts",
   fullyParallel: false,
   use: {
-    baseURL: "http://127.0.0.1:3000",
+    baseURL: "http://127.0.0.1:3002",
     launchOptions: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
       ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH }
       : {},
@@ -21,11 +21,11 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "npm run start",
-    url: "http://127.0.0.1:3000",
-    reuseExistingServer: !process.env.CI,
+    command: "npm run start -- --port 3002",
+    url: "http://127.0.0.1:3002",
+    reuseExistingServer: false,
     env: {
-      APP_URL: "http://127.0.0.1:3000",
+      APP_URL: "http://127.0.0.1:3002",
       NEXT_PUBLIC_SUPABASE_URL: "",
       NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "",
       OWNER_AUTH_USER_ID: "",

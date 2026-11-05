@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { ResearchImport } from "@/components/research-import";
+import { LatestResearch, ResearchHistory } from "@/components/research-history";
 import { ArrowUpRight } from "@/components/icons";
 import { notFound } from "next/navigation";
 import {
@@ -38,7 +40,14 @@ export default async function Page({
   searchParams,
 }: {
   params: Promise<{ section?: string[] }>;
-  searchParams: Promise<{ q?: string; before?: string; archived?: string }>;
+  searchParams: Promise<{
+    q?: string;
+    before?: string;
+    archived?: string;
+    run?: string;
+    history_page?: string;
+    items_page?: string;
+  }>;
 }) {
   const segments = (await params).section ?? [];
   const section = segments[0] ?? "overview";
@@ -89,7 +98,23 @@ export default async function Page({
   return (
     <>
       <PageHeading title={title} description={description} />
-      {section === "inbox" && <Capture />}
+      {section === "inbox" && (
+        <>
+          <Capture />
+          <ResearchHistory
+            db={db}
+            runId={search.run}
+            page={
+              Math.max(0, Math.min(50000, Number(search.history_page) || 0)) | 0
+            }
+            itemPage={
+              Math.max(0, Math.min(50000, Number(search.items_page) || 0)) | 0
+            }
+          />
+          <ResearchImport />
+        </>
+      )}
+      {section === "overview" && <LatestResearch db={db} />}
       {section === "overview" && (
         <div className="welcome">
           <div>

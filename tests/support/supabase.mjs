@@ -1,7 +1,7 @@
 // Synthetic Supabase protocol fixture. Never deploy or use with production credentials.
 import http from "node:http";
 import crypto from "node:crypto";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import { PGlite } from "@electric-sql/pglite";
 const owner = "00000000-0000-4000-8000-000000000001";
 const user = {
@@ -18,11 +18,54 @@ const db = new PGlite();
 await db.exec(
   `create role anon;create role authenticated;create schema auth;create table auth.users(id uuid primary key);create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;grant usage on schema auth to authenticated,anon;grant execute on function auth.uid() to authenticated,anon;`,
 );
-await db.exec(
-  await readFile("supabase/migrations/202611050001_core.sql", "utf8"),
-);
+for (const file of (await readdir("supabase/migrations"))
+  .filter((f) => f.endsWith(".sql"))
+  .sort()) {
+  await db.exec(await readFile("supabase/migrations/" + file, "utf8"));
+}
 await db.query("insert into auth.users values($1)", [owner]);
 await db.query("insert into profiles(owner_id) values($1)", [owner]);
+// Recreate only the two synthetic existing identities for history UAT; never real tracker data.
+await db.query("select set_config('request.jwt.claim.sub',$1,false)", [owner]);
+const researchFixture = JSON.parse(
+  await readFile("examples/research_history.synthetic.json", "utf8"),
+);
+for (const [
+  index,
+  record,
+] of researchFixture.initial_personal_records.entries()) {
+  const item = researchFixture.runs[0].items.find(
+    (i) => i.external_id === record.external_id,
+  );
+  const result = await db.query(
+    "select public.capture_draft($1,$2,$3) result",
+    [
+      { title: "Owner title " + index, source_url: item.evidence_url },
+      "10000000-0000-4000-8000-00000000000" + (index + 1),
+      item.evidence_url,
+    ],
+  );
+  await db.query(
+    "insert into research_identities(owner_id,source_system,external_id,opportunity_id,first_seen_at,source_checked_at,public_snapshot) values($1,$2,$3,$4,$5,null,$6)",
+    [
+      owner,
+      "synthetic_research_history",
+      record.external_id,
+      result.rows[0].result.opportunity_id,
+      record.first_seen_at,
+      {},
+    ],
+  );
+}
+for (const source of [
+  "synthetic_research_history_desktop",
+  "synthetic_research_history_mobile",
+]) {
+  await db.query(
+    "insert into research_identities(owner_id,source_system,external_id,opportunity_id,first_seen_at,source_checked_at,public_snapshot) select owner_id,$1,external_id,opportunity_id,first_seen_at,source_checked_at,public_snapshot from research_identities where source_system=$2",
+    [source, "synthetic_research_history"],
+  );
+}
 const encode = (o) => Buffer.from(JSON.stringify(o)).toString("base64url");
 const header = encode({ alg: "HS256", typ: "JWT" }),
   payload = encode({
@@ -80,6 +123,14 @@ const server = http.createServer(async (req, res) => {
           if (url.pathname.includes("/rpc/")) {
             const name = url.pathname.split("/").at(-1);
             const args = {
+              resolve_research_proposal: [
+                "p_id",
+                "p_expected",
+                "p_action",
+                "p_fields",
+              ],
+              prepare_research: ["p_batch"],
+              apply_research: ["p_preview", "p_hash"],
               capture_draft: ["p_payload", "p_key", "p_canonical"],
               update_opportunity: ["p_id", "p_patch"],
               add_milestone: ["p_id", "p_payload"],
@@ -99,6 +150,10 @@ const server = http.createServer(async (req, res) => {
               "milestones",
               "change_history",
               "profiles",
+              "research_runs",
+              "research_items",
+              "research_corrections",
+              "research_proposals",
             ].includes(table)
           )
             throw new Error("Table not supported");
@@ -111,6 +166,9 @@ const server = http.createServer(async (req, res) => {
             "archived_at",
             "created_at",
             "title",
+            "research_run_id",
+            "source_system",
+            "status",
           ]) {
             const filter = url.searchParams.get(key);
             if (!filter) continue;
@@ -135,7 +193,16 @@ const server = http.createServer(async (req, res) => {
             .filter(Boolean)
             .map((o) => {
               const [col, dir, nulls] = o.split(".");
-              if (!["created_at", "id", "date", "start_at"].includes(col))
+              if (
+                ![
+                  "created_at",
+                  "id",
+                  "date",
+                  "start_at",
+                  "imported_at",
+                  "external_id",
+                ].includes(col)
+              )
                 throw new Error("Unsupported order");
               return (
                 col +
@@ -153,7 +220,7 @@ const server = http.createServer(async (req, res) => {
           );
           const rows = (
             await tx.query(
-              `select to_jsonb(row_data) as result from (select ${columns} from public.${table}${conditions.length ? " where " + conditions.join(" and ") : ""}${order.length ? " order by " + order.join(",") : ""} limit ${limit}) row_data`,
+              `select to_jsonb(row_data) as result from (select ${columns} from public.${table}${conditions.length ? " where " + conditions.join(" and ") : ""}${order.length ? " order by " + order.join(",") : ""} limit ${limit} offset ${Math.max(0, Number(url.searchParams.get("offset") ?? 0))}) row_data`,
               values,
             )
           ).rows.map((row) => row.result);

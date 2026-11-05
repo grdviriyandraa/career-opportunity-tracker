@@ -239,7 +239,7 @@ export function Settings() {
           ],
           [
             "Google Sheets",
-            "Belum diimplementasikan. Tracker riset existing tetap terpisah.",
+            "Belum terhubung. Impor snapshot JSON melalui preview tersedia di Inbox. Tracker riset existing tetap terpisah.",
           ],
           [
             "Hermes / Telegram",
