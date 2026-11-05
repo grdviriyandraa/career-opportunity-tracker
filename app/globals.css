@@ -850,3 +850,55 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
+.agenda-coverage-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  border-block: 1px solid var(--line);
+  padding: 18px 0;
+  margin: 20px 0;
+}
+.agenda-coverage-grid dt {
+  font-size: 11px;
+  color: var(--muted);
+}
+.agenda-coverage-grid dd {
+  margin: 5px 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+.agenda-alert {
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+.agenda-alert p {
+  margin: 8px 0 0;
+  font-size: 13px;
+}
+.agenda-alert a {
+  font-weight: 600;
+  color: var(--green);
+  overflow-wrap: anywhere;
+}
+.agenda-alert.definite .badge {
+  color: #a02f25;
+  border-color: #efd5cf;
+  background: #fff0ee;
+}
+.agenda-alert.potential .badge {
+  color: #876422;
+  border-color: #eadfc7;
+  background: #fff9e9;
+}
+.agenda-filters h2 {
+  margin-bottom: 22px;
+}
+@media (max-width: 720px) {
+  .agenda-coverage-grid {
+    grid-template-columns: 1fr;
+  }
+  .agenda-coverage .section-heading {
+    align-items: flex-start;
+  }
+}

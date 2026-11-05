@@ -6,7 +6,7 @@
 - Server Codex MCP global bernama `supabase` berhasil didaftarkan dan target project-nya diverifikasi melalui CLI.
 - `.env.local` yang di-ignore Git dibuat dari konfigurasi publik yang diberikan owner. Tidak ada secret key aplikasi yang disimpan. User UID owner masih kosong.
 - Endpoint Supabase ditolak proxy environment dengan CONNECT HTTP 403. Login MCP gagal pada discovery metadata OAuth, sebelum browser authorization selesai. Ini bukan bukti bahwa project rusak atau OAuth tidak didukung.
-- Domain dan nilai konfigurasi non-secret sudah tersimpan ke draft environment. Draft belum diterapkan/published. Tidak ada migrasi, provisioning user, email OTP, atau perubahan database live yang dijalankan.
+- Domain dan nilai konfigurasi non-secret sudah tersimpan ke draft environment. Owner melaporkan pengaturan sudah disimpan, tetapi instance ini masih menggunakan revision 1 tanpa custom allowed domains; penerapan pada runtime ini belum terverifikasi. Tidak ada migrasi, provisioning user, email OTP, atau perubahan database live yang dijalankan.
 
 Project reference dan email sebenarnya hanya berada dalam konfigurasi lokal/draft, bukan contoh publik dokumen ini. Region yang diberikan owner belum diverifikasi melalui API.
 
@@ -23,14 +23,14 @@ CRUD aplikasi tidak memerlukan secret key/service-role. Secret key yang dibagika
 
 ## Langkah untuk membuka blocker jaringan
 
-Di Environment Settings, review dan simpan domain yang sudah ditambahkan ke draft:
+Domain yang sudah disimpan ke draft Environment Settings:
 
 - Host project: `<PROJECT_REF>.supabase.co`.
 - `mcp.supabase.com`.
 - `api.supabase.com`.
 - `supabase.com` (OAuth/dashboard/dokumentasi).
 
-Lalu publish environment. Preset package-manager dan domain existing dipertahankan. Tidak ada wildcard yang ditambahkan. Saving draft tidak langsung mengubah proxy runtime. Setelah konfigurasi aktif, ulangi pemeriksaan read-only; jangan bypass proxy atau mematikan TLS verification.
+Owner sudah melaporkan pengaturan dilakukan. Tidak perlu mengulang penyimpanan hanya karena instance lama masih memakai policy lama. Buka cloud task baru dengan branch feat/tracker-core, lalu periksa environment_status dan policy aktual. Preset package-manager dan domain existing dipertahankan; tidak ada wildcard. Setelah konfigurasi runtime aktif, ulangi pemeriksaan read-only tanpa bypass proxy atau mematikan TLS verification.
 
 ## MCP Codex
 

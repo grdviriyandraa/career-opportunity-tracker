@@ -7,15 +7,15 @@ Environment: Linux cloud, Node 24.22.1, npm 11.9.0. Dependency versions are pinn
 | npm ci --no-audit --no-fund                   | PASS                     | Frozen lockfile installation, no TLS or integrity bypass.                                                       |
 | npm run lint                                  | PASS                     | Active app/lib/components/tests; archived source excluded.                                                      |
 | npm run typecheck                             | PASS                     | next typegen + strict TypeScript.                                                                               |
-| npm test                                      | PASS, 36 tests / 4 files | 7 domain, 12 core PostgreSQL/PGlite, 4 configuration and 13 research schema/database tests. No hosted provider. |
+| npm test                                      | PASS, 51 tests / 5 files | 7 domain, 12 core PostgreSQL/PGlite, 4 configuration, 13 research schema/database and 15 Agenda tests. No hosted provider. |
 | npm run build                                 | PASS                     | Production webpack build and route generation, two workers.                                                     |
 | npm run test:e2e                              | PASS, 6 tests            | Desktop/mobile setup, navigation, no horizontal overflow, setup/API denial, not-found.                          |
-| npm run test:e2e:core                         | PASS, 4 tests            | Desktop/mobile, synthetic Auth/PostgREST transport + real PGlite database.                                      |
+| npm run test:e2e:core                         | PASS, 6 tests            | Desktop/mobile, synthetic Auth/PostgREST transport + real PGlite database.                                      |
 | Handoff manifest                              | PASS, 57 hashes          | Original archive entries retained; no application-readiness claim.                                              |
-| Baseline handoff documents                    | Unchanged                | Baseline private documents were neither rewritten nor pushed.                                                   |
-| Hosted Supabase / actual email OTP            | BLOCKED                  | Project, owner/profile and delivery configuration not supplied.                                                 |
+| Baseline handoff documents                    | Unchanged                | Existing remote baseline documents unchanged; new changes scanned before feature branch push.                                                   |
+| Hosted Supabase / actual email OTP            | BLOCKED                  | Project public configuration supplied; runtime proxy denies Supabase, owner/profile/delivery unverified.                                                 |
 | Google / Sheets / Hermes / Telegram / restore | NOT_RUN                  | Features remain pending; mocks do not release these gates.                                                      |
-| GitHub Actions / production deploy            | NOT_RUN                  | Workflow supplied, not run remotely.                                                                            |
+| GitHub Actions / production deploy            | UNKNOWN / NOT_RUN        | Feature branch pushed; remote Actions read denied by proxy. No deployment.                                                                            |
 
 Database tests verify fresh migration, authenticated owner read, other-user RLS isolation, anonymous denial, direct-write denial, private-table denial, duplicate and replay semantics, idempotency conflict, stale revisions, separate posting/personal stage, date-only persistence, missing/invalid event interval rejection, and rollback of domain changes when audit fails.
 
@@ -41,7 +41,7 @@ Preview tests cover bounded payload/schema, reconciliation, server-held hash, ta
 
 Browser tests also inspect old and new snapshots, source counts, replay/correction notice, per-field review after personal edits, and Overview latest-snapshot provenance. A test initially read the Inbox heading before detail navigation completed; it now waits for the detail revision. Screenshot capture now waits for the selected snapshot and its twenty items rather than recording loading UI. Final screenshot evidence is in docs/evidence/research-summary-desktop.png and research-summary-mobile.png; all content is synthetic.
 
-Analytics Dashboard's browser-skill template was not accessible. Owner explicitly chose the existing design for now. Connected-app tools/read_thread were not exposed; the supplied conversation preview was treated as historical data. Native read-only Git succeeded and main remains 83161ffd53d4dda2099790f966332dc7cd3058e3. No push, merge, deployment or external data writes occurred.
+Analytics Dashboard's browser-skill template was not accessible. Owner explicitly chose the existing design for now. Connected-app tools/read_thread were not exposed; the supplied conversation preview was treated as historical data. Native read-only Git succeeded and main remains 83161ffd53d4dda2099790f966332dc7cd3058e3. No push occurred at that historical checkpoint. Later authorized feature-branch push is recorded below; no main merge, deployment or external data writes occurred.
 
 Limitations: normalized manual research batches only; live Sheet/header/log adapters, initial migration, emergency recovery, acceptance of run corrections, R05/Hermes and actual Supabase setup remain pending. See docs/INPUTS_REQUIRED.md for precise owner actions. Current runtime has no configured app variable/secret bindings; the saved draft does not establish hosted readiness.
 
@@ -52,3 +52,14 @@ Final boundary review also added malformed/empty URL regression assertions for c
 `npx --yes skills@1.7.6 add supabase/agent-skills --agent codex --yes --copy` installed both official skills. `codex mcp add supabase --url ...` exited 0; sanitized CLI readback confirmed the server name, mcp.supabase.com host and supplied project scope. `codex mcp login supabase --no-browser` exited 1 during OAuth metadata discovery. Read-only project Auth endpoint checks failed at the environment proxy with CONNECT 403, before any API-key validation. Supabase changelog/docs access was similarly blocked. No live readiness claim is made. Network/public project suggestions and updated startup instructions were confirmed saved to the draft (requires_publish=true); this did not apply/publish the configuration.
 
 Local setup smoke after creating .env.local showed only OWNER_AUTH_USER_ID missing; no public project field was reported missing. npm run typecheck passed. Project-specific values and .env.local were verified absent from the staged diff. Official skill files are preserved verbatim (one upstream trailing space in the contributing reference); hand-authored changes pass git diff --check.
+
+
+## Authorized push and Agenda continuation
+
+Owner requested push and continuation. Commits 97621a1, 1723ca4 and 7938e3d were pushed to feat/tracker-core through existing native Git authentication. Main was not merged. Remote GitHub Actions read via api.github.com failed CONNECT 403, so remote CI status is unknown. New outgoing changes were scanned for project-specific local configuration and credential patterns; .env.local remains ignored.
+
+Added internal coverage-aware Agenda UI and owner-only read API, buffer checks, confirmed/potential overlap and separate deadline proximity. Exact dependency @js-temporal/polyfill 0.5.1 and lockfile added for timezone/DST calculation; no new SQL migration. Cache-contract tests are pure synthetic tests, not Google integration. See AGENDA.md for caps and unsupported recurrence/cancellation/workload.
+
+After final implementation: lint PASS, typecheck PASS, npm test 51 passed / 5 files, production build PASS, test:e2e 6 passed and test:e2e:core 6 passed. Browser suites cover desktop and 390px; synthetic Auth/PostgREST transport plus real PostgreSQL/PGlite. Agenda checks include unauthenticated identity spoof denial, bad query rejection, no-store response, date-only preservation, definite/potential classification, buffer UI/API and visible incomplete external coverage. Final screenshots evidence/agenda-coverage-desktop.png and agenda-coverage-mobile.png contain synthetic data. Mobile coverage screenshot was visually inspected; layout overflow assertions also passed.
+
+The current runtime still reports revision 1 and no custom allowed hosts despite owner reporting settings saved. Hosted Supabase, MCP OAuth, verified owner UUID and real email remain blocked/unverified. No new private tracker data, Google events, Sheets writes, Telegram sends, deployments or main merge occurred.

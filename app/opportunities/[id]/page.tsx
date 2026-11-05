@@ -82,6 +82,11 @@ export default async function Detail({
         </p>
       )}
       <EditOpportunity key={item.revision} item={item} />
+      <p>
+        <Link href="/agenda" className="text-link">
+          Periksa bentrok di Agenda →
+        </Link>
+      </p>
       <Milestones items={milestones.data as Milestone[]} />
       <AddMilestone
         key={"milestone-" + item.revision}

@@ -215,7 +215,7 @@ const server = http.createServer(async (req, res) => {
           if (!["*", "id,operation,created_at"].includes(columns))
             throw new Error("Unsupported columns");
           const limit = Math.min(
-            200,
+            1000,
             Number(url.searchParams.get("limit") ?? 50),
           );
           const rows = (

@@ -201,6 +201,14 @@ export function Milestones({ items }: { items: Milestone[] }) {
                       timeStyle: "short",
                       timeZone: m.timezone,
                     }).format(new Date(m.start_at!))}
+                    {m.kind === "event" &&
+                      m.end_at &&
+                      " sampai " +
+                        new Intl.DateTimeFormat("id-ID", {
+                          dateStyle: "medium",
+                          timeStyle: "short",
+                          timeZone: m.timezone,
+                        }).format(new Date(m.end_at))}
                   </time>
                   <small>{m.timezone}</small>
                 </>

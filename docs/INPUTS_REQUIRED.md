@@ -16,7 +16,7 @@ Kelima requirement sudah disimpan pada draft environment dari tahap sebelumnya. 
 
 ## Akses sumber live
 
-Pada sesi implementasi ini tool GitHub/Google Drive/Calendar/Spreadsheets dan read_thread tidak diekspos, walaupun ditandai dalam pesan. Ini bukan bukti akun belum terhubung. Read-only Git melalui proxy native berhasil; main masih 83161ffd53d4dda2099790f966332dc7cd3058e3. Tidak ada token GitHub baru yang diperlukan untuk pemeriksaan tersebut. Tidak ada push atau perubahan remote.
+Pada sesi implementasi ini tool GitHub/Google Drive/Calendar/Spreadsheets dan read_thread tidak diekspos, walaupun ditandai dalam pesan. Ini bukan bukti akun belum terhubung. Read-only Git melalui proxy native berhasil; main masih 83161ffd53d4dda2099790f966332dc7cd3058e3. Tidak ada token GitHub baru yang diperlukan untuk pemeriksaan tersebut. Branch feat/tracker-core sudah berhasil di-push atas permintaan owner; main tidak di-merge. Status remote CI belum dapat dibaca karena api.github.com ditolak proxy.
 
 Untuk pembacaan live nanti, tool sumber tersebut perlu tersedia pada sesi. Preview percakapan hanya konteks historis; bukan hasil verifikasi baru dan bukan seed produksi. Website tetap membutuhkan Google OAuth sendiri; koneksi ChatGPT bukan credential website. Google OAuth client/scopes, pilihan kalender, legacy cutover dan scheduler ditetapkan saat WP04, bukan dengan memberikan akses Calendar luas sekarang.
 
@@ -28,4 +28,4 @@ Hermes tetap di Windows native, memakai model lokal dan anggaran API Rp0 tanpa c
 
 ## Pembaruan konfigurasi Supabase
 
-Owner sudah memberikan project, publishable key dan email. Nilai tersebut disiapkan dalam `.env.local` yang di-ignore serta draft environment; tidak ada secret key yang disimpan. MCP berhasil didaftarkan tetapi OAuth metadata discovery gagal karena endpoint Supabase ditolak proxy (CONNECT 403). User UID, migrasi hosted dan provisioning masih pending. Lihat docs/SUPABASE_SETUP.md. Review/simpan domain draft, publish environment, lalu selesaikan OAuth pada instance Codex yang sama agar pemeriksaan live dapat dilanjutkan.
+Owner sudah memberikan project, publishable key dan email. Nilai tersebut disiapkan dalam `.env.local` yang di-ignore serta draft environment; tidak ada secret key yang disimpan. MCP berhasil didaftarkan tetapi OAuth metadata discovery gagal karena endpoint Supabase ditolak proxy (CONNECT 403). User UID, migrasi hosted dan provisioning masih pending. Lihat docs/SUPABASE_SETUP.md. Owner melaporkan pengaturan sudah disimpan. Instance saat ini tetap melaporkan revision 1 tanpa custom allowed domains; ini perbedaan runtime dengan draft, bukan bukti owner belum menyimpan. Pada cloud task baru pilih branch feat/tracker-core, lalu periksa policy runtime sebelum melanjutkan OAuth/live checks.

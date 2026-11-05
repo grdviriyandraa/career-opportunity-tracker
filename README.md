@@ -2,7 +2,7 @@
 
 Aplikasi pribadi Bahasa Indonesia untuk menyimpan peluang Jobs, Bootcamps dan Competitions. Implementasi awal menyediakan tujuh menu, email OTP owner, capture draft, daftar/pencarian, detail, update progres, arsip, milestone internal dan audit transaksional.
 
-**Status:** fondasi dan alur inti sedang diuji. Impor manual dengan preview, riwayat riset per run, dan review field publik tersedia. Koneksi Google Calendar/Sheets, recovery, recurrence, agent API, MCP dan live Telegram belum tersedia. Baca [STATUS.md](STATUS.md). Source di `reference_partial_source/` adalah arsip parsial yang tidak runnable, bukan aplikasi ini.
+**Status:** fondasi dan alur inti sedang diuji. Impor manual dengan preview, riwayat riset per run, dan review field publik tersedia. Agenda internal menyediakan pemeriksaan bentrok, buffer dan deadline berdekatan dengan cakupan yang terlihat. Koneksi Google Calendar/Sheets, recovery, recurrence, agent API, MCP dan live Telegram belum tersedia. Baca [STATUS.md](STATUS.md). Source di `reference_partial_source/` adalah arsip parsial yang tidak runnable, bukan aplikasi ini.
 
 ## Menjalankan
 
@@ -57,7 +57,7 @@ npm run test:e2e:core
 Jika Chromium sistem sudah tersedia, gunakan `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium` pada Linux. Di Windows PowerShell, set `$env:PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` hanya bila memakai browser existing; jika tidak, gunakan browser yang dipasang Playwright.
 
 - `test:e2e`: desktop + 390 px, setup yang jujur, navigasi, error dan penolakan API ketika belum dikonfigurasi.
-- `test:e2e:core`: database sintetis terisolasi, mock transport Supabase Auth/PostgREST; login, capture, update, konflik revisi, milestone, dedup dan preservasi progres pada desktop + 390 px. Proses fixture hanya untuk test dan dihentikan runner. Tidak membuktikan email/Auth hosted live.
+- `test:e2e:core`: database sintetis terisolasi, mock transport Supabase Auth/PostgREST; login, capture, update, konflik revisi, milestone, dedup, preservasi progres, impor/review riset dan Agenda pada desktop + 390 px. Proses fixture hanya untuk test dan dihentikan runner. Tidak membuktikan email/Auth hosted live.
 - Tests tidak menyentuh Google, Sheets, Telegram atau tracker pribadi.
 
 ## Struktur dan batas perilaku
@@ -87,3 +87,7 @@ Inbox menyimpan snapshot immutable per run, membedakan baru/lama diperiksa/carry
 Baca [format impor dan batasnya](docs/RESEARCH_IMPORT.md) serta [konfigurasi yang diperlukan](docs/INPUTS_REQUIRED.md). Paket sintetis hanya dipakai di tests; tidak ada data riset privat yang dimuat otomatis. Koneksi Google Sheets live dan penerapan koreksi run belum tersedia.
 
 Setup Supabase untuk checkpoint saat ini sudah dimulai: lihat [status MCP, jaringan dan owner](docs/SUPABASE_SETUP.md). Project tidak perlu dibuat ulang; registrasi MCP belum setara OAuth atau database live yang siap.
+
+## Agenda internal
+
+Buka Agenda untuk memilih tanggal mulai, rentang 1–180 hari dan buffer sebelum/sesudah. Acara dengan jam pasti dapat menghasilkan bentrok pasti; tanggal saja atau kehadiran bersyarat menghasilkan potensi bentrok. Deadline memiliki peringatan kedekatan tersendiri dan tidak dihitung sebagai durasi kerja. Cakupan internal dan keterbatasan kalender eksternal selalu ditampilkan. Lihat [aturan dan batas Agenda](docs/AGENDA.md).

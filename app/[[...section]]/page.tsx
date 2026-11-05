@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AgendaWorkspace } from "@/components/agenda-view";
 import { ResearchImport } from "@/components/research-import";
 import { LatestResearch, ResearchHistory } from "@/components/research-history";
 import { ArrowUpRight } from "@/components/icons";
@@ -7,12 +8,11 @@ import {
   Capture,
   DatabaseFailure,
   gate,
-  Milestones,
   OpportunityList,
   PageHeading,
   Settings,
 } from "@/components/views";
-import type { Milestone, Opportunity } from "@/lib/domain";
+import type { Opportunity } from "@/lib/domain";
 export const dynamic = "force-dynamic";
 const pages: Record<string, [string, string, Opportunity["category"]]> = {
   overview: [
@@ -47,6 +47,10 @@ export default async function Page({
     run?: string;
     history_page?: string;
     items_page?: string;
+    start?: string;
+    days?: string;
+    buffer_before?: string;
+    buffer_after?: string;
   }>;
 }) {
   const segments = (await params).section ?? [];
@@ -58,20 +62,10 @@ export default async function Page({
   if (section === "settings") return <Settings />;
   const [title, description, category] = pages[section];
   if (section === "agenda") {
-    const { data, error } = await db
-      .from("milestones")
-      .select("*")
-      .order("date", { ascending: true, nullsFirst: false })
-      .order("start_at")
-      .limit(200);
     return (
       <>
         <PageHeading title={title} description={description} />
-        {error ? (
-          <DatabaseFailure />
-        ) : (
-          <Milestones items={data as Milestone[]} />
-        )}
+        <AgendaWorkspace db={db} query={await searchParams} />
       </>
     );
   }
