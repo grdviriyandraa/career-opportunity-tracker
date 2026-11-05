@@ -102,6 +102,15 @@ test("Agenda checks confirmed, date-only and buffered intervals without claiming
   const data = await r.json();
   expect(data.external.state).toBe("not_connected");
   expect(data.partial).toBe(true);
+  expect(data.loaded_count).toBeGreaterThanOrEqual(5006);
+  expect(data.source_read).toMatchObject({
+    complete: true,
+    exhausted: true,
+    mode: "sequential",
+    issues: [],
+  });
+  expect(data.source_read.page_count).toBeGreaterThan(10);
+  expect(data.internal_data_complete).toBe(true);
   const pair = (a: string, b: string) =>
     data.conflicts.find(
       (c: { first_id: string; second_id: string }) =>
@@ -163,4 +172,52 @@ test("Agenda checks confirmed, date-only and buffered intervals without claiming
         [c.first_id, c.second_id].includes(ids[2]),
     ).kind,
   ).toBe("buffer_warning");
+});
+
+test("Agenda finds an overlap in the last page of a 5,000-milestone inventory", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByLabel("Email", { exact: true }).fill("owner@example.test");
+  await page.getByRole("button", { name: "Kirim kode masuk" }).click();
+  await page.getByLabel("Kode email").fill("123456");
+  await page.getByRole("button", { name: "Verifikasi dan masuk" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Langkah berikutnya dimulai di sini" }),
+  ).toBeVisible();
+  const response = await page.request.get(
+    "/api/agenda?start=2030-05-15&days=1",
+  );
+  expect(response.status()).toBe(200);
+  const report = await response.json();
+  expect(report.source_read.complete).toBe(true);
+  expect(report.source_read.total_at_start).toBe(report.loaded_count);
+  expect(report.source_read.total_at_end).toBe(report.loaded_count);
+  expect(report.source_truncated).toBe(false);
+  expect(report.items).toHaveLength(2);
+  expect(report.conflicts).toEqual([
+    {
+      first_id: "fffffffe-0000-4000-8000-000000004999",
+      second_id: "fffffffe-0000-4000-8000-000000005000",
+      kind: "confirmed_overlap",
+    },
+  ]);
+  await page.goto("/agenda?start=2030-05-15&days=1");
+  await expect(page.getByText("Bentrok pasti", { exact: true })).toBeVisible();
+  await expect(
+    page.getByText("Belum terhubung", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByText(/2 milestone dalam rentang dari 5[0-9]+ dimuat/),
+  ).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await page
+    .locator(".agenda-coverage")
+    .screenshot({
+      path: "test-results/agenda-volume-" + test.info().project.name + ".png",
+    });
 });

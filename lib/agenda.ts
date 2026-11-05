@@ -120,6 +120,7 @@ export function analyseAgenda(
     timezone?: string;
     now?: string;
     sourceTruncated?: boolean;
+    sourceIncomplete?: boolean;
     busyCache?: BusyCache;
     maxAlerts?: number;
   } = {},
@@ -295,6 +296,7 @@ export function analyseAgenda(
   }
   const internalComplete =
     !options.sourceTruncated &&
+    !options.sourceIncomplete &&
     !invalidIds.length &&
     !conflictsTruncated &&
     !deadlinesTruncated;

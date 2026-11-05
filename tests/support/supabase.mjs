@@ -66,6 +66,25 @@ for (const source of [
     [source, "synthetic_research_history"],
   );
 }
+// Volume fixture: archived synthetic parent, 4,998 old dates and two future
+// overlapping events whose IDs sort after the first 1,000 milestones.
+await db.query(
+  "insert into opportunities(id,owner_id,title,archived_at,created_at) values($1,$2,'Synthetic volume fixture','2025-01-01','2025-01-01')",
+  ["00000000-0000-4000-8000-000000005000", owner],
+);
+await db.query(
+  `insert into milestones(id,owner_id,opportunity_id,title,kind,precision,date,start_at,end_at,timezone,attendance)
+   select ('fffffffe-0000-4000-8000-' || lpad(i::text,12,'0'))::uuid,$1,'00000000-0000-4000-8000-000000005000'::uuid,
+   'Synthetic volume ' || i,
+   case when i<=4998 then 'deadline' else 'event' end,
+   case when i<=4998 then 'date' else 'instant' end,
+   case when i<=4998 then '2024-01-01'::date else null end,
+   case when i>4998 then '2030-05-15T10:00:00+07:00'::timestamptz else null end,
+   case when i>4998 then '2030-05-15T11:00:00+07:00'::timestamptz else null end,
+   'Asia/Jakarta',case when i<=4998 then 'unknown' else 'confirmed' end
+   from generate_series(1,5000) i`,
+  [owner],
+);
 const encode = (o) => Buffer.from(JSON.stringify(o)).toString("base64url");
 const header = encode({ alg: "HS256", typ: "JWT" }),
   payload = encode({
@@ -181,7 +200,7 @@ const server = http.createServer(async (req, res) => {
               continue;
             }
             const split = filter.indexOf(".");
-            const op = { eq: "=", lt: "<", ilike: "ilike" }[
+            const op = { eq: "=", lt: "<", gt: ">", ilike: "ilike" }[
               filter.slice(0, split)
             ];
             if (!op) throw new Error("Unsupported filter");
@@ -214,6 +233,16 @@ const server = http.createServer(async (req, res) => {
           const columns = url.searchParams.get("select") ?? "*";
           if (!["*", "id,operation,created_at"].includes(columns))
             throw new Error("Unsupported columns");
+          if (req.headers.prefer?.includes("count=exact")) {
+            const total = (
+              await tx.query(
+                `select count(*)::int as total from public.${table}${conditions.length ? " where " + conditions.join(" and ") : ""}`,
+                values,
+              )
+            ).rows[0].total;
+            res.setHeader("Content-Range", "*/" + total);
+          }
+          if (req.method === "HEAD") return null;
           const limit = Math.min(
             1000,
             Number(url.searchParams.get("limit") ?? 50),

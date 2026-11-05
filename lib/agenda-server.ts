@@ -3,6 +3,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "./database.types";
 import { agendaQuerySchema, analyseAgenda } from "./agenda";
 import { dbError, HttpError } from "./server";
+import { readAgendaSource } from "./agenda-source";
 export async function loadAgenda(
   db: SupabaseClient<Database>,
   input: Record<string, unknown>,
@@ -15,11 +16,29 @@ export async function loadAgenda(
       "Rentang atau buffer tidak valid. Gunakan tanggal ISO, 1–180 hari dan buffer 0–120 menit.",
     );
   const now = new Date().toISOString();
-  const [milestones, profile] = await Promise.all([
-    db.from("milestones").select("*").order("id").limit(1000),
+  const [loaded, profile] = await Promise.all([
+    readAgendaSource(
+      async ({ after, limit, count }) => {
+        let request = db
+          .from("milestones")
+          .select("*", count ? { count: "exact" } : {})
+          .order("id")
+          .limit(limit);
+        if (after) request = request.gt("id", after);
+        const page = await request;
+        dbError(page.error);
+        return { rows: page.data ?? [], count: page.count };
+      },
+      async () => {
+        const result = await db
+          .from("milestones")
+          .select("*", { count: "exact", head: true });
+        dbError(result.error);
+        return result.count;
+      },
+    ),
     db.from("profiles").select("*").maybeSingle(),
   ]);
-  dbError(milestones.error);
   dbError(profile.error);
   if (!profile.data)
     throw new HttpError(
@@ -27,14 +46,20 @@ export async function loadAgenda(
       "OWNER_PROFILE_REQUIRED",
       "Profile owner belum tersedia. Selesaikan provisioning Supabase.",
     );
-  const rows = milestones.data ?? [];
+  const rows = loaded.rows;
   try {
-    return analyseAgenda(rows, {
-      ...query.data,
-      timezone: profile.data.timezone,
-      now,
-      sourceTruncated: rows.length >= 1000,
-    });
+    return {
+      ...analyseAgenda(rows, {
+        ...query.data,
+        timezone: profile.data.timezone,
+        now,
+        sourceTruncated: loaded.source.issues.some(
+          (issue) => issue === "row_limit" || issue === "request_limit",
+        ),
+        sourceIncomplete: !loaded.source.complete,
+      }),
+      source_read: loaded.source,
+    };
   } catch {
     throw new HttpError(
       503,

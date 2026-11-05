@@ -90,4 +90,6 @@ Setup Supabase untuk checkpoint saat ini sudah dimulai: lihat [status MCP, jarin
 
 ## Agenda internal
 
-Buka Agenda untuk memilih tanggal mulai, rentang 1–180 hari dan buffer sebelum/sesudah. Acara dengan jam pasti dapat menghasilkan bentrok pasti; tanggal saja atau kehadiran bersyarat menghasilkan potensi bentrok. Deadline memiliki peringatan kedekatan tersendiri dan tidak dihitung sebagai durasi kerja. Cakupan internal dan keterbatasan kalender eksternal selalu ditampilkan. Lihat [aturan dan batas Agenda](docs/AGENDA.md).
+Buka Agenda untuk memilih tanggal mulai, rentang 1–180 hari dan buffer sebelum/sesudah. Acara dengan jam pasti dapat menghasilkan bentrok pasti; tanggal saja atau kehadiran bersyarat menghasilkan potensi bentrok. Deadline memiliki peringatan kedekatan tersendiri dan tidak dihitung sebagai durasi kerja. Cakupan internal dan keterbatasan kalender eksternal selalu ditampilkan. Pembacaan bertahap mencakup lebih dari 1.000 milestone; batas atau perubahan jumlah data saat pemeriksaan diberi peringatan. Lihat [aturan dan batas Agenda](docs/AGENDA.md).
+
+Source terbaru ada di branch `feat/tracker-core` yang sudah di-push atas permintaan owner. Pilih branch tersebut saat membuka cloud task baru; main belum di-merge.

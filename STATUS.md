@@ -11,7 +11,7 @@ WP00 audited; WP01–02, the internal Agenda subset of WP03, and the manual rese
 | WP00         | IMPLEMENTED_UNVERIFIED           | Baseline audit, ADR-001, dependency pins, lockfile, file map and privacy review. No hosted release.                                                                                                                                                                       |
 | WP01         | TESTED_MOCK (core subset)        | SQL migrations, owner/RLS, transactional draft/update/milestone + immutable history and blocked outbox. Hosted migration/Auth email not tested; broad domain model, worker grants and rate limits incomplete.                                                             |
 | WP02         | IN_PROGRESS                      | Seven menus, OTP form, capture/list/detail/progress/archive/search, exact URL dedup, revision conflict. Category-specific full forms, actions/undo entities, contacts/documents and extraction proposals remain.                                                          |
-| WP03         | IN_PROGRESS                      | Coverage-aware internal Agenda UI/API, half-open overlap, buffers, date-only/conditional potential alerts, deadline proximity and IANA/DST tests. Recurrence/exceptions, cancellation, workload/capacity and reminders remain.                                                                                                |
+| WP03         | IN_PROGRESS                      | Paged owner reads (5,000-record synthetic fixture), coverage-aware internal Agenda UI/API, half-open overlap, buffers, date-only/conditional potential alerts, deadline proximity and IANA/DST tests. Recurrence/exceptions, cancellation, workload/capacity and reminders remain.                                                                                                |
 | WP04         | NOT_STARTED                      | Google OAuth, Calendar/FreeBusy, encryption, worker/scheduler, retry/conflict resolution and legacy cutover.                                                                                                                                                              |
 | WP05         | IN_PROGRESS                      | TESTED_MOCK subset: normalized JSON preview/apply, immutable R01–R04 snapshots, carry-forward, replay/correction quarantine, public field review, 300-row/rollback checks. Live Sheet/header parser, R05, correction acceptance, recovery, full export and backup remain. |
 | WP06         | NOT_STARTED                      | Agent API, scoped credential mint/revoke and rate limits. Website cookie API is not the agent API.                                                                                                                                                                        |
@@ -97,7 +97,7 @@ Live Google, Windows Hermes/Ollama and Telegram are separate later gates. No pro
 
 1. Validate core against owner development Supabase and SMTP; expand API/auth/rate-limit tests.
 2. Complete category detail tables/forms, actual action/undo history and provenance proposals.
-3. Extend internal Agenda with paged source reads, recurrence/exceptions, cancellation and workload.
+3. Extend internal Agenda with recurrence/exceptions, cancellation and workload; atomic snapshot reads remain beyond current sequential pagination.
 4. Follow WP04–WP08 for provider/worker/research/agent delivery, then full acceptance and restore drill.
 
 ## Research/history continuation
@@ -109,3 +109,9 @@ Research code is validated against synthetic inputs/transport. No private Sheet 
 ## Supabase project configuration checkpoint
 
 Project metadata, publishable key and owner email have now been supplied and prepared in ignored local configuration plus the environment draft. Both official Supabase skills were installed and read. Codex global MCP registration succeeded and project scope was verified. The runtime still denies Supabase domains with proxy CONNECT 403; MCP login stopped at OAuth metadata discovery. No hosted migration, Auth provisioning, OTP email or live domain writes occurred. OWNER_AUTH_USER_ID remains pending verification. See docs/SUPABASE_SETUP.md for the precise steps. The pasted application secret was not stored or used.
+
+## Agenda pagination continuation
+
+Removed the first-1,000-row limitation with bounded keyset reads and initial/final RLS counts. Exactly 10,000 rows can complete; larger inventories, request caps, missing/changing counts or non-advancing cursors are explicitly incomplete. A 5,000-milestone synthetic PGlite fixture proves the last-page overlap is returned through the real website API and visible on desktop/mobile. No schema/grant/RLS changes. Reads are sequential, not an atomic snapshot; P95 hosted performance remains unverified.
+
+Current checks: lint/typecheck/build PASS; 61 unit/database tests across 6 files PASS; 6 setup + 8 core/research/Agenda browser tests PASS. Live Supabase stays blocked on this instance; remote CI status remains unknown.

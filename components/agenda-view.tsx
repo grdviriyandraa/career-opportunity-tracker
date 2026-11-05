@@ -1,7 +1,8 @@
 import Link from "next/link";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/database.types";
-import type { AgendaReport, AgendaAlert } from "@/lib/agenda";
+import type { AgendaAlert } from "@/lib/agenda";
+type AgendaReport = Awaited<ReturnType<typeof loadAgenda>>;
 import { loadAgenda } from "@/lib/agenda-server";
 import { HttpError } from "@/lib/server";
 import { DatabaseFailure, Milestones } from "./views";
@@ -197,9 +198,15 @@ export async function AgendaWorkspace({
         </p>
         {report.source_truncated && (
           <p className="error" role="alert">
-            Batas 1.000 milestone yang dimuat tercapai; jadwal lain belum
-            diperiksa. Pembacaan semua halaman akan tersedia pada tahap
-            berikutnya.
+            Batas pembacaan jadwal tercapai; hasil belum mencakup seluruh
+            milestone. Jadwal lain belum diperiksa.
+          </p>
+        )}
+        {!report.source_read.complete && !report.source_truncated && (
+          <p className="error" role="alert">
+            {report.source_read.issues.includes("count_changed")
+              ? "Jumlah milestone berubah selama pemeriksaan. Muat ulang untuk memeriksa jadwal terbaru."
+              : "Cakupan pembacaan milestone belum dapat dipastikan. Muat ulang sebelum menilai hasil."}
           </p>
         )}
         {!!report.invalid_milestone_ids.length && (
