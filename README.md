@@ -34,7 +34,7 @@ Jangan overwrite `.env.local` yang sudah ada. Aplikasi menampilkan panduan setup
 
 Supabase perlu dapat dijangkau melalui HTTPS oleh server. Dalam cloud dengan allowlist, tambahkan hostname project yang benar di environment settings setelah project dipilih. Tidak diperlukan akses Google untuk alur inti. Jangan kirim secrets di chat, commit `.env.local`, atau memakai database produksi pada tests.
 
-Checkpoint hosted 5 November: dua migrasi existing dan singleton profile owner sudah diterapkan serta diverifikasi. Nama file kini mengikuti versi history MCP (`20261105143738_core`, `20261105143833_research`); isi SQL sama dengan file lama. Jangan menerapkan ulang migrasi pada project existing. OTP request sudah diterima, tetapi delivery/session dan penutupan public signup masih menjadi gate. Detail di [SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md). Pada managed cloud Node 24, gunakan `NODE_USE_ENV_PROXY=1 npm run dev` atau `NODE_USE_ENV_PROXY=1 npm run start` agar fetch mengikuti proxy dan CA yang diwariskan; tidak perlu mengubah policy environment.
+Checkpoint hosted 5 November: core, research, agent API, milestone lifecycle dan singleton profile owner sudah diterapkan serta diverifikasi. Nama file mengikuti history MCP (`20261105143738_core`, `20261105143833_research`, `20261105154620_agent_api`, `20261105165019_milestone_lifecycle`); isi SQL cocok dengan checksum yang disetujui. Jangan menerapkan ulang migrasi pada project existing. OTP request sudah diterima, tetapi delivery/session dan penutupan public signup masih menjadi gate. Detail di [SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md). Pada managed cloud Node 24, gunakan `NODE_USE_ENV_PROXY=1 npm run dev` atau `NODE_USE_ENV_PROXY=1 npm run start` agar fetch mengikuti proxy dan CA yang diwariskan; tidak perlu mengubah policy environment.
 
 ## Verifikasi
 
@@ -94,7 +94,7 @@ Setup Supabase untuk checkpoint saat ini sudah dimulai: lihat [status MCP, jarin
 
 Buka Agenda untuk memilih tanggal mulai, rentang 1–180 hari dan buffer sebelum/sesudah. Acara dengan jam pasti dapat menghasilkan bentrok pasti; tanggal saja atau kehadiran bersyarat menghasilkan potensi bentrok. Deadline memiliki peringatan kedekatan tersendiri dan tidak dihitung sebagai durasi kerja. Cakupan internal dan keterbatasan kalender eksternal selalu ditampilkan. Pembacaan bertahap mencakup lebih dari 1.000 milestone; batas atau perubahan jumlah data saat pemeriksaan diberi peringatan. Lihat [aturan dan batas Agenda](docs/AGENDA.md).
 
-Detail peluang kini menyediakan edit, pembatalan dan pemulihan milestone dengan guard revisi peluang + milestone. Milestone dibatalkan tetap memiliki riwayat dan dapat dipulihkan; dikecualikan dari Agenda aktif serta deadline agent. [Migrasi lifecycle dan batas Google](docs/MILESTONES.md) masih memerlukan penerapan hosted tersendiri; jangan replay tiga migrasi existing.
+Detail peluang kini menyediakan edit, pembatalan dan pemulihan milestone dengan guard revisi peluang + milestone. Milestone dibatalkan tetap memiliki riwayat dan dapat dipulihkan; dikecualikan dari Agenda aktif serta deadline agent. [Migrasi lifecycle dan batas Google](docs/MILESTONES.md) sudah diterapkan hosted setelah persetujuan owner; jangan replay empat migrasi existing. Website belum di-deploy dan sesi owner hosted masih perlu diuji.
 
 Source terbaru ada di branch `feat/tracker-core` yang sudah di-push atas permintaan owner. Pilih branch tersebut saat membuka cloud task baru; main belum di-merge.
 

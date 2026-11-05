@@ -1,6 +1,6 @@
 # Lifecycle milestone internal
 
-Edit, batal dan pulih tersedia di detail peluang. Migrasi lokal `20261105161819_milestone_lifecycle.sql` belum diterapkan hosted pada checkpoint implementasi. Ini tidak menambah recurrence atau mengubah Google Calendar.
+Edit, batal dan pulih tersedia di detail peluang. Migrasi `20261105165019_milestone_lifecycle.sql` sudah diterapkan hosted setelah persetujuan owner; checksum, schema/ACL dan penolakan akses anonymous terverifikasi. Sesi owner hosted dan website deployment belum diuji. Ini tidak menambah recurrence atau mengubah Google Calendar.
 
 ## Perilaku owner
 
@@ -34,7 +34,7 @@ Pembatalan menambah calendar_cleanup_review; edit/pulih menambah milestone_chang
 
 cancelled_at nullable/default null menjaga record existing tetap aktif. Partial index owner_id/id mencakup milestone aktif. Agenda menerapkan cancelled_at IS NULL pada setiap page/count dan HEAD count akhir; engine murni juga mengabaikan canceled input. Agent read mempertahankan guard/ACL existing dan mengecualikan deadline canceled. Detail membaca aktif maupun canceled agar status/restore tersedia. Pagination masih sequential; ubah jadwal lalu periksa ulang bila dibutuhkan.
 
-Migration diperlukan sebelum memakai pembacaan Agenda source terbaru pada hosted. Jangan menerapkan ulang tiga migrasi core/research/agent yang sudah tercatat. Tinjau history, target dan advisors sebelum menerapkan migration lifecycle yang baru. SQL migrasi lama tidak diubah pada checkpoint lokal ini.
+Keempat migrasi core/research/agent/lifecycle sudah tercatat pada project development existing; jangan diterapkan ulang. Source filename mengikuti versi history MCP tanpa mengubah SQL atau menulis ulang metadata history. Database lain memerlukan pemeriksaan target/history tersendiri. Advisors masih memuat warning SECURITY DEFINER yang didokumentasikan pada release evidence; ini bukan bukti seluruh acceptance hosted selesai.
 
 ## Validasi
 

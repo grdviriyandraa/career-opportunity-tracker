@@ -27,7 +27,7 @@ Envelope read mempertahankan unknown/null, next_cursor, warnings dan partial. ap
 
 Pagination memakai UUID berurutan, bukan urutan deadline/kronologi. Cursor memuat posisi dan hash filter tervalidasi, tanpa credential. Perubahan filter/limit dengan cursor lama menghasilkan 400. Antarpage bersifat sequential, bukan snapshot atomik; next_cursor harus diikuti sebelum menyebut hasil lengkap. Date-only tetap tanpa jam; instant disaring menurut tanggal Asia/Jakarta. Deadline tool tidak memeriksa FreeBusy.
 
-Setelah [migrasi lifecycle milestone](MILESTONES.md) diterapkan, deadline yang dibatalkan di website dikecualikan dari hasil agent dan kembali terlihat jika dipulihkan. Migrasi lifecycle masih lokal pada checkpoint ini; guard/ACL dan empat tool agent tetap sama. Agent tidak mendapat izin edit/cancel/restore.
+Setelah [migrasi lifecycle milestone](MILESTONES.md) diterapkan, deadline yang dibatalkan di website dikecualikan dari hasil agent dan kembali terlihat jika dipulihkan. Migrasi lifecycle sudah diterapkan hosted dengan checksum/schema/ACL terverifikasi; guard/ACL dan empat tool agent tetap sama. Credential live/session masih belum diuji. Agent tidak mendapat izin edit/cancel/restore.
 
 ## Otorisasi dan transaksi
 

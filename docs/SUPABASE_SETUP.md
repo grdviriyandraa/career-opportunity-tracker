@@ -6,19 +6,19 @@
 - Runtime terbaru running/connected dan policy restricted/enforced mengizinkan keempat host Supabase. Script diagnosis jaringan exit 0. Tidak perlu publish ulang environment.
 - OAuth MCP read-only selesai. Owner kemudian menyetujui OAuth database write, penerapan dua migrasi existing dan provisioning profile. OAuth write tersebut juga selesai; tidak meminta API key melalui chat.
 - Inspeksi awal menemukan satu akun Auth terkonfirmasi, tanpa tabel public atau migration history. Dua migrasi berhasil diterapkan sekali dan satu profile yang cocok dengan UUID owner terverifikasi dibuat. Owner melihat satu profile melalui simulasi role authenticated; UUID lain melihat nol.
-- Versi hosted: `20261105143738_core` dan `20261105143833_research`. Nama file lokal diselaraskan dengan versi ini; checksum SQL tidak berubah. Jangan menjalankan ulang SQL memakai nama file lama. Metadata history hosted tidak diubah.
+- Empat versi hosted: `20261105143738_core`, `20261105143833_research`, `20261105154620_agent_api`, dan `20261105165019_milestone_lifecycle`. Nama file lokal diselaraskan dengan versi ini; checksum SQL tidak berubah. Jangan menjalankan ulang SQL memakai nama file lama. Metadata history hosted tidak diubah.
 - `.env.local` yang di-ignore dipulihkan dari email akun Auth terkonfirmasi dan publishable key publik; UUID owner tersedia dari runtime. Tidak ada service-role key yang diperlukan atau ditampilkan.
 - Website lokal dijalankan dengan `NODE_USE_ENV_PROXY=1 npm run start` pada Node 24 agar fetch Auth mengikuti proxy/TLS environment. Satu permintaan OTP owner diterima HTTP 200. Email delivery, template kode angka, verifikasi kode dan sesi website belum dibuktikan.
 - Pengaturan Auth publik menunjukkan signup masih aktif. Matikan public signup pada Dashboard sebelum acceptance owner-only. Bila email hanya memuat tautan, ubah template Magic Link agar memuat `{{ .Token }}`; jangan membagikan OTP atau tautan login ke chat.
-- Advisors sesudah migrasi agent memberi warning pada sembilan authenticated dan dua anonymous SECURITY DEFINER RPC, serta leaked-password protection disabled. Dua RPC anonymous memerlukan credential opaque dengan scope/expiry/revoke/rate guard; RPC owner menolak anon dan semua helper privat menolak direct EXECUTE. Dua tabel privat baru memiliki INFO RLS tanpa policy yang sengaja deny-all. Search_path kosong dan ACL diperiksa; warning tetap dicatat, bukan dinyatakan hilang. Lihat release evidence.
+- Advisors sesudah migrasi agent memberi warning pada sepuluh authenticated dan dua anonymous SECURITY DEFINER RPC, serta leaked-password protection disabled. Dua RPC anonymous memerlukan credential opaque dengan scope/expiry/revoke/rate guard; RPC owner menolak anon dan semua helper privat menolak direct EXECUTE. Dua tabel privat baru memiliki INFO RLS tanpa policy yang sengaja deny-all. Search_path kosong dan ACL diperiksa; warning tetap dicatat, bukan dinyatakan hilang. Lihat release evidence.
 
 Project reference dan email sebenarnya hanya berada dalam konfigurasi lokal/draft, bukan contoh publik dokumen ini. Region yang diberikan owner belum diverifikasi melalui API.
 
-Source lokal selanjutnya menambahkan `20261105161819_milestone_lifecycle.sql` untuk edit/batal/pulih milestone dan pembacaan aktif. Migrasi keempat ini belum diterapkan hosted. Tiga migrasi existing tetap terverifikasi dan tidak dijalankan ulang. Tinjau [lifecycle milestone](MILESTONES.md) sebelum memakai Agenda source terbaru dengan database hosted.
+Migrasi keempat `20261105165019_milestone_lifecycle.sql` untuk edit/batal/pulih milestone dan pembacaan aktif sudah diterapkan hosted setelah persetujuan owner. SQL cocok dengan checksum yang disetujui; nama file lama 20261105161819 disamakan dengan history MCP tanpa mengubah SQL/history hosted. Tiga migrasi sebelumnya tidak dijalankan ulang. Tinjau [lifecycle milestone](MILESTONES.md) sebelum memakai Agenda source terbaru dengan database hosted.
 
 ## Empat jenis akses yang berbeda
 
-Kelanjutan WP06 menerapkan migrasi `20261105154620_agent_api.sql` untuk endpoint/credential agent setelah persetujuan owner. Ketiga migrasi sudah diverifikasi melalui checksum history; jangan apply ulang. Tabel privat memakai RLS dan menolak akses langsung, RPC memiliki explicit grants. Jumlah grant/receipt agent masih nol. Nomor file sebelumnya 20261105151101; nama lokal kini cocok dengan versi history MCP tanpa mengubah SQL/history hosted. Lihat [AGENT_API.md](AGENT_API.md); tidak perlu menerbitkan ulang environment atau mengirim key baru.
+Kelanjutan WP06 menerapkan migrasi `20261105154620_agent_api.sql` untuk endpoint/credential agent setelah persetujuan owner. Keempat migrasi sudah diverifikasi melalui checksum history; jangan apply ulang. Tabel privat memakai RLS dan menolak akses langsung, RPC memiliki explicit grants. Jumlah grant/receipt agent masih nol. Nomor file sebelumnya 20261105151101; nama lokal kini cocok dengan versi history MCP tanpa mengubah SQL/history hosted. Lihat [AGENT_API.md](AGENT_API.md); tidak perlu menerbitkan ulang environment atau mengirim key baru.
 
 | Akses                                      | Dipakai untuk                                          | Bukan pengganti               |
 | ------------------------------------------ | ------------------------------------------------------ | ----------------------------- |
@@ -62,7 +62,7 @@ Browser laptop dapat berhenti pada `127.0.0.1:<port>/callback` dengan connection
 ## Login owner dan database website
 
 1. Setelah akses MCP/admin tersedia, inspeksi project, tabel, user Auth, dan migration history. Jangan mengasumsikan database kosong atau menjalankan ulang migrasi yang sudah diterapkan.
-2. Terapkan dua migrasi existing secara terkontrol dan transactional sesuai workflow Supabase yang terverifikasi. Baca skill Supabase, changelog dan docs terkini; jalankan advisors untuk perubahan schema/security. Tidak ada schema baru yang diterapkan pada pekerjaan konfigurasi ini.
+2. Project existing sudah memiliki keempat migrasi; jangan jalankan ulang. Untuk database development baru, inspeksi target/history lalu terapkan file berurutan sesuai workflow Supabase yang terverifikasi. Baca skill/changelog/docs dan jalankan advisors untuk perubahan schema/security.
 3. Nonaktifkan public signup. Provision akun owner melalui Authentication dan verifikasi email. Ambil **User UID (UUID)** dari akun tersebut; email/project ref bukan UUID owner.
 4. Pastikan hanya owner yang dimaksud ada pada `public.profiles`. Bootstrap berikut hanya setelah memeriksa owner/migration yang sudah ada:
 
@@ -82,4 +82,4 @@ Data API dapat aktif, tetapi tabel tetap memerlukan explicit grants dan RLS. Jan
 
 ## Bukti dan batas verifikasi
 
-Koneksi live/OAuth, kedua migrasi dan owner/profile sudah diverifikasi pada instance terbaru. Changelog dan panduan OTP resmi dibaca. HTTP 200 pada permintaan OTP hanya membuktikan permintaan diterima provider; belum membuktikan delivery atau sesi login. Signup/template perlu ditinjau pada Dashboard. Tidak ada real tracker data atau synthetic seed yang dimasukkan ke project live.
+Koneksi live/OAuth, keempat migrasi dan owner/profile sudah diverifikasi pada instance terbaru. Changelog dan panduan OTP resmi dibaca. HTTP 200 pada permintaan OTP hanya membuktikan permintaan diterima provider; belum membuktikan delivery atau sesi login. Signup/template perlu ditinjau pada Dashboard. Tidak ada real tracker data atau synthetic seed yang dimasukkan ke project live.
