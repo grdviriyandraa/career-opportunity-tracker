@@ -85,3 +85,5 @@ Google OAuth, scheduler/cutover legacy, Sheets, agent grants/MCP, Windows Ollama
 Inbox menyimpan snapshot immutable per run, membedakan baru/lama diperiksa/carry-forward, serta menampilkan waktu riset terpisah dari waktu impor. Overview memakai snapshot terakhir yang benar-benar tersimpan, bukan jumlah baris hasil pencarian. Impor JSON manual selalu melalui preview server-held; fakta sumber existing menjadi usulan dan progres pribadi dipertahankan. Review detail dapat menerapkan field publik terpilih dengan revision check.
 
 Baca [format impor dan batasnya](docs/RESEARCH_IMPORT.md) serta [konfigurasi yang diperlukan](docs/INPUTS_REQUIRED.md). Paket sintetis hanya dipakai di tests; tidak ada data riset privat yang dimuat otomatis. Koneksi Google Sheets live dan penerapan koreksi run belum tersedia.
+
+Setup Supabase untuk checkpoint saat ini sudah dimulai: lihat [status MCP, jaringan dan owner](docs/SUPABASE_SETUP.md). Project tidak perlu dibuat ulang; registrasi MCP belum setara OAuth atau database live yang siap.

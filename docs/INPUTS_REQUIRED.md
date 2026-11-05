@@ -2,7 +2,7 @@
 
 ## Untuk memakai alur website live sekarang
 
-Owner perlu menyiapkan project Supabase development dan lima variabel di Environment Settings atau `.env.local` yang di-ignore:
+Project development, publishable key dan email owner sudah diberikan dan disiapkan dalam `.env.local` yang di-ignore. Tidak perlu membuat project baru. Aktivasi jaringan, OAuth MCP dan User UID owner masih diperlukan; lihat [status setup Supabase](SUPABASE_SETUP.md). Lima variabel konfigurasi referensi:
 
 - APP_URL: origin canonical browser website.
 - NEXT_PUBLIC_SUPABASE_URL: endpoint project development.
@@ -25,3 +25,7 @@ Untuk pembacaan live nanti, tool sumber tersebut perlu tersedia pada sesi. Previ
 Owner memilih melanjutkan desain aplikasi sekarang dan menyesuaikan Analytics Dashboard ketika sumber templatenya dapat diakses. Template asli belum dibaca atau digunakan; ini bukan blocker backend.
 
 Hermes tetap di Windows native, memakai model lokal dan anggaran API Rp0 tanpa cloud fallback. Pemilihan tag/model dan live bot dilakukan pada laptop owner saat WP08. Tidak ada bot, token, inferensi atau receiver Telegram yang dibuat dari pekerjaan ini.
+
+## Pembaruan konfigurasi Supabase
+
+Owner sudah memberikan project, publishable key dan email. Nilai tersebut disiapkan dalam `.env.local` yang di-ignore serta draft environment; tidak ada secret key yang disimpan. MCP berhasil didaftarkan tetapi OAuth metadata discovery gagal karena endpoint Supabase ditolak proxy (CONNECT 403). User UID, migrasi hosted dan provisioning masih pending. Lihat docs/SUPABASE_SETUP.md. Review/simpan domain draft, publish environment, lalu selesaikan OAuth pada instance Codex yang sama agar pemeriksaan live dapat dilanjutkan.

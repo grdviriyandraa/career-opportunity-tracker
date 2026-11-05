@@ -1,0 +1,75 @@
+# Supabase: aplikasi, MCP, dan owner
+
+## Status setup saat ini
+
+- Dua skill resmi `supabase/agent-skills` dipasang sebagai copy di `.agents/skills/` dengan CLI `skills@1.7.6`. `skills-lock.json` mencatat source dan hash. Skill sudah dibaca; tidak mengubah dependency aplikasi.
+- Server Codex MCP global bernama `supabase` berhasil didaftarkan dan target project-nya diverifikasi melalui CLI.
+- `.env.local` yang di-ignore Git dibuat dari konfigurasi publik yang diberikan owner. Tidak ada secret key aplikasi yang disimpan. User UID owner masih kosong.
+- Endpoint Supabase ditolak proxy environment dengan CONNECT HTTP 403. Login MCP gagal pada discovery metadata OAuth, sebelum browser authorization selesai. Ini bukan bukti bahwa project rusak atau OAuth tidak didukung.
+- Domain dan nilai konfigurasi non-secret sudah tersimpan ke draft environment. Draft belum diterapkan/published. Tidak ada migrasi, provisioning user, email OTP, atau perubahan database live yang dijalankan.
+
+Project reference dan email sebenarnya hanya berada dalam konfigurasi lokal/draft, bukan contoh publik dokumen ini. Region yang diberikan owner belum diverifikasi melalui API.
+
+## Empat jenis akses yang berbeda
+
+| Akses                                      | Dipakai untuk                                          | Bukan pengganti               |
+| ------------------------------------------ | ------------------------------------------------------ | ----------------------------- |
+| Publishable key                            | Client/data API; dipasangkan dengan sesi user dan RLS  | Admin SQL atau OAuth MCP      |
+| Secret key aplikasi                        | Operasi server istimewa bila benar-benar diperlukan    | Management API/MCP login      |
+| OAuth MCP atau scoped Management API token | Tool administratif Supabase sesuai project/permissions | Sesi login owner pada website |
+| Password/koneksi PostgreSQL                | Migrasi/admin database melalui koneksi yang sah        | Login browser aplikasi        |
+
+CRUD aplikasi tidak memerlukan secret key/service-role. Secret key yang dibagikan lewat chat perlu dicabut/dirotasi di dashboard API Keys; jangan kirim penggantinya di chat. Tidak perlu membuat key server baru hanya untuk menjalankan CRUD ini.
+
+## Langkah untuk membuka blocker jaringan
+
+Di Environment Settings, review dan simpan domain yang sudah ditambahkan ke draft:
+
+- Host project: `<PROJECT_REF>.supabase.co`.
+- `mcp.supabase.com`.
+- `api.supabase.com`.
+- `supabase.com` (OAuth/dashboard/dokumentasi).
+
+Lalu publish environment. Preset package-manager dan domain existing dipertahankan. Tidak ada wildcard yang ditambahkan. Saving draft tidak langsung mengubah proxy runtime. Setelah konfigurasi aktif, ulangi pemeriksaan read-only; jangan bypass proxy atau mematikan TLS verification.
+
+## MCP Codex
+
+Perintah registrasi, jika belum ada:
+
+```sh
+codex mcp add supabase --url 'https://mcp.supabase.com/mcp?project_ref=PROJECT_REF&features=docs%2Caccount%2Cdatabase%2Cdebugging%2Cdevelopment%2Cfunctions%2Cbranching%2Cfeedback'
+codex mcp login supabase
+```
+
+Ganti `PROJECT_REF` dengan project yang diberikan owner. Kutip seluruh URL karena mengandung `&`. Jangan menimpa server existing yang ternyata menunjuk project lain tanpa memeriksa konteks.
+
+Untuk lingkungan headless, CLI yang terpasang mendukung `codex mcp login supabase --no-browser`. Ikuti flow browser dari CLI pada instance yang sama. Login pada laptop/instance lain tidak otomatis memberi credential ke cloud ini. Secret key aplikasi tidak boleh dipasang sebagai bearer token MCP.
+
+`/mcp` adalah perintah antarmuka Codex, bukan perintah Bash. Setelah OAuth selesai, refresh koneksi MCP dan pastikan tools terlihat. Registrasi server saja tidak membuktikan koneksi/auth siap. OAuth credential dan konfigurasi global tidak diasumsikan pulih pada task baru; startup instructions sudah mencatat verifikasi registrasi.
+
+## Login owner dan database website
+
+1. Setelah akses MCP/admin tersedia, inspeksi project, tabel, user Auth, dan migration history. Jangan mengasumsikan database kosong atau menjalankan ulang migrasi yang sudah diterapkan.
+2. Terapkan dua migrasi existing secara terkontrol dan transactional sesuai workflow Supabase yang terverifikasi. Baca skill Supabase, changelog dan docs terkini; jalankan advisors untuk perubahan schema/security. Tidak ada schema baru yang diterapkan pada pekerjaan konfigurasi ini.
+3. Nonaktifkan public signup. Provision akun owner melalui Authentication dan verifikasi email. Ambil **User UID (UUID)** dari akun tersebut; email/project ref bukan UUID owner.
+4. Pastikan hanya owner yang dimaksud ada pada `public.profiles`. Bootstrap berikut hanya setelah memeriksa owner/migration yang sudah ada:
+
+   ```sql
+   insert into public.profiles(owner_id)
+   select id from auth.users
+   where id = 'OWNER_UUID'::uuid and email_confirmed_at is not null
+   on conflict (owner_id) do nothing;
+   ```
+
+   Nol baris berarti akun/konfirmasi belum cocok; jangan menganggap provisioning berhasil. Constraint singleton mencegah owner kedua.
+
+5. Isi `OWNER_AUTH_USER_ID` pada `.env.local`/environment settings dengan UUID yang terverifikasi. URL project, publishable key dan email sudah disiapkan lokal; periksa nama/presence tanpa mencetak nilainya.
+6. Atur template email login Supabase untuk menampilkan `{{ .Token }}`. Restart aplikasi, login melalui email owner, lalu uji simpan/edit dan akses tanpa sesi. Jangan menganggap OTP delivery atau RLS hosted lulus dari mock tests.
+
+Data API dapat aktif, tetapi tabel tetap memerlukan explicit grants dan RLS. Jangan memberi semua role hak tulis sebagai cara mengatasi error. Migrations existing membatasi SELECT ke authenticated owner dan mutation melalui fungsi transaksi dengan owner/revision guards; verifikasi lagi menggunakan advisors dan negative access tests pada hosted project.
+
+## Bukti dan batas verifikasi
+
+Registrasi MCP sudah berhasil. Koneksi Supabase live, OAuth MCP, User UID, migrasi dan real login masih BLOCKED oleh jaringan/authorization. Dokumen Supabase pada domain resmi juga terblokir; fallback path GitHub yang dicoba mengembalikan 404. Jangan menganggap changelog terkini sudah diverifikasi.
+
+Pemeriksaan aplikasi lokal hanya membuktikan konfigurasi non-secret terbaca dan menampilkan setup yang jujur ketika UUID owner belum tersedia. Tidak ada real tracker data atau synthetic seed yang dimasukkan ke project live.

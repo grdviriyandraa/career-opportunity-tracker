@@ -4,7 +4,7 @@ Baseline repository: `83161ffd53d4dda2099790f966332dc7cd3058e3` (historical hand
 
 ## Current scope
 
-WP00 audited; WP01–02, a small WP03 slice, and the manual research/history subset of WP05 implemented. New standard Next.js application is separate from the legacy reference archive. G1 hosted/live acceptance remains BLOCKED by missing Supabase project/owner configuration. G2–G5 are not released. This is not the complete PRD or a production-ready tracker.
+WP00 audited; WP01–02, a small WP03 slice, and the manual research/history subset of WP05 implemented. New standard Next.js application is separate from the legacy reference archive. G1 hosted/live acceptance remains BLOCKED by runtime network access, MCP OAuth and verified owner configuration. G2–G5 are not released. This is not the complete PRD or a production-ready tracker.
 
 | Work package | Status                           | Actual result / remaining work                                                                                                                                                                                                                                            |
 | ------------ | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -89,7 +89,7 @@ PARTIAL means only the listed core behavior exists; it does not mean the full FR
 
 ## External configuration required
 
-Owner: create a development Supabase project, disable signup, provision one owner and profile, configure email OTP delivery, fill the five variables from `.env.example`, and allow the actual project hostname in restricted networking. No secrets requested in chat. The app does not need a service-role key for CRUD.
+The project URL, publishable key and owner email are now prepared in ignored local configuration and the draft. Activate the saved network settings, finish MCP OAuth, verify the Auth owner UUID/profile, restrict signup and configure OTP delivery. Do not create a duplicate project. No secrets requested in chat. The app does not need a service-role key for CRUD.
 
 Live Google, Windows Hermes/Ollama and Telegram are separate later gates. No production credentials, Calendar events, Sheets writes, LLM calls, deployments or new research automations were created. Backup and 24/7 availability are not provided.
 
@@ -105,3 +105,7 @@ Live Google, Windows Hermes/Ollama and Telegram are separate later gates. No pro
 See docs/RESEARCH_IMPORT.md and docs/INPUTS_REQUIRED.md. The linked Analytics Dashboard template was unavailable; owner explicitly chose to retain the current application design and adapt the template later. No claim of using the original template is made. Connected-app tools and read_thread were not exposed in this session; the provided conversation preview is historical context only. Native read-only Git succeeded; no push was attempted.
 
 Research code is validated against synthetic inputs/transport. No private Sheet rows were imported and no Google/Telegram side effects occurred. R01–R04 coverage is limited to normalized batches, not live DAILY_RESEARCH_LOG parsing. R05 remains NOT_RUN. Run corrections are preserved for review but cannot yet replace accepted history.
+
+## Supabase project configuration checkpoint
+
+Project metadata, publishable key and owner email have now been supplied and prepared in ignored local configuration plus the environment draft. Both official Supabase skills were installed and read. Codex global MCP registration succeeded and project scope was verified. The runtime still denies Supabase domains with proxy CONNECT 403; MCP login stopped at OAuth metadata discovery. No hosted migration, Auth provisioning, OTP email or live domain writes occurred. OWNER_AUTH_USER_ID remains pending verification. See docs/SUPABASE_SETUP.md for the precise steps. The pasted application secret was not stored or used.

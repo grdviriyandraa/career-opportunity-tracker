@@ -46,3 +46,9 @@ Analytics Dashboard's browser-skill template was not accessible. Owner explicitl
 Limitations: normalized manual research batches only; live Sheet/header/log adapters, initial migration, emergency recovery, acceptance of run corrections, R05/Hermes and actual Supabase setup remain pending. See docs/INPUTS_REQUIRED.md for precise owner actions. Current runtime has no configured app variable/secret bindings; the saved draft does not establish hosted readiness.
 
 Final boundary review also added malformed/empty URL regression assertions for capture and research payloads. Validation now returns schema errors instead of throwing from URL parsing; lint/typecheck, all 36 unit/database tests and the production build passed after the fix.
+
+## Supabase setup checkpoint
+
+`npx --yes skills@1.7.6 add supabase/agent-skills --agent codex --yes --copy` installed both official skills. `codex mcp add supabase --url ...` exited 0; sanitized CLI readback confirmed the server name, mcp.supabase.com host and supplied project scope. `codex mcp login supabase --no-browser` exited 1 during OAuth metadata discovery. Read-only project Auth endpoint checks failed at the environment proxy with CONNECT 403, before any API-key validation. Supabase changelog/docs access was similarly blocked. No live readiness claim is made. Network/public project suggestions and updated startup instructions were confirmed saved to the draft (requires_publish=true); this did not apply/publish the configuration.
+
+Local setup smoke after creating .env.local showed only OWNER_AUTH_USER_ID missing; no public project field was reported missing. npm run typecheck passed. Project-specific values and .env.local were verified absent from the staged diff. Official skill files are preserved verbatim (one upstream trailing space in the contributing reference); hand-authored changes pass git diff --check.

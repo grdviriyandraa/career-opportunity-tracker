@@ -8,6 +8,10 @@ Never commit credentials, real tracker data, private operational records, CVs, .
 
 Run lint, typecheck, unit/database tests, build and affected browser tests; distinguish synthetic Supabase transport from hosted live evidence. Update STATUS.md with actual commands and limitations. Do not claim Calendar/Telegram/restore readiness from a successful build. Scope is website plus read/draft-only agent; do not enable coding/terminal/Google/GitHub tools through Telegram. No production deployment, merge to main or destructive migration without explicit authorization.
 
+## Supabase skills
+
+Before Supabase work, read `.agents/skills/supabase/SKILL.md`; before database/schema/RLS work also read `.agents/skills/supabase-postgres-best-practices/SKILL.md` and relevant references. The official skills are copied locally and pinned by skills-lock.json; do not update them silently. See docs/SUPABASE_SETUP.md for the distinction between app keys, MCP OAuth and database access. Keep project-specific configuration in ignored local files or environment settings.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 ## This is NOT the Next.js you know
