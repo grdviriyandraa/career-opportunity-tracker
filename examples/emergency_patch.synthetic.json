@@ -1,0 +1,19 @@
+{
+  "schema_version": 2,
+  "mode": "emergency_patch",
+  "snapshot_id": "synthetic-snapshot-001",
+  "patches": [
+    {
+      "entity_type": "opportunity",
+      "entity_id": "00000000-0000-4000-8000-000000000001",
+      "base_revision": 3,
+      "changes": [
+        {
+          "field_path": "priority",
+          "base_value": "medium",
+          "proposed_value": "high"
+        }
+      ]
+    }
+  ]
+}

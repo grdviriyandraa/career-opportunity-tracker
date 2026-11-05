@@ -1,0 +1,27 @@
+{
+  "schema_version": 2,
+  "source_system": "synthetic_research_fixture",
+  "run_id": "SYNTHETIC-RUN-001",
+  "completed_at": "2026-11-04T08:30:00+07:00",
+  "items": [
+    {
+      "external_id": "SYNTHETIC-JOB-001",
+      "category": "job",
+      "public_patch": {
+        "title": "Business Analyst Intern",
+        "organization_name": "Example Analytics",
+        "work_arrangement": "remote",
+        "employer_hours": null,
+        "student_eligibility": "unknown"
+      },
+      "source_evidence": [
+        {
+          "field": "work_arrangement",
+          "url": "https://example.com/jobs?id=synthetic-001",
+          "excerpt": "Remote internship",
+          "checked_at": "2026-11-04T08:30:00+07:00"
+        }
+      ]
+    }
+  ]
+}

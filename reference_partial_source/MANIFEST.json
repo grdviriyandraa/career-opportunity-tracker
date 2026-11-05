@@ -1,0 +1,111 @@
+{
+  "kind": "partial_reference_not_runnable",
+  "source_path": "/workspace/sites/gerard-opportunity-hub",
+  "files": [
+    {
+      "path": "package.json",
+      "size_bytes": 2139,
+      "sha256": "9dc3b3fb45e75d8125571ca78fd170a62bbc0f57521dcd2e53bc84a5a435c377"
+    },
+    {
+      "path": "app/page.tsx",
+      "size_bytes": 4466,
+      "sha256": "c2293d77b0cff0d149cc153eae96eb6f807f0967b12a177b387f8d9b695f6d7f"
+    },
+    {
+      "path": "app/layout.tsx",
+      "size_bytes": 523,
+      "sha256": "fb20da0ae67bb49128afe28c32dba4ff1588e70d6c913a64ef8a0b95f94d63da"
+    },
+    {
+      "path": "app/chatgpt-auth.ts",
+      "size_bytes": 2550,
+      "sha256": "4265a2e7c2dcb3a6f4b7026f762bf5b6e4caec76cc13c0a45987ee9a9f2e42cc"
+    },
+    {
+      "path": "components/record-form.tsx",
+      "size_bytes": 8887,
+      "sha256": "3127ee681736a9bf57999e08f776551673205866eb474b34af818238b2577577"
+    },
+    {
+      "path": "lib/model.ts",
+      "size_bytes": 11472,
+      "sha256": "2146704a490bf03368dd2019d29637ba764b590168096735a475ba2ef33a7c9b"
+    },
+    {
+      "path": "lib/server.ts",
+      "size_bytes": 7042,
+      "sha256": "b9cd0fca79ada5c627c271e0ce4f49f112734663c766ee6fc9b29d542a02cd7f"
+    },
+    {
+      "path": "lib/google.ts",
+      "size_bytes": 7939,
+      "sha256": "26613939cd2f8630e95b0837f2bf623800390f2cc22951ca96e139427a50d3dd"
+    },
+    {
+      "path": "lib/importer.ts",
+      "size_bytes": 3690,
+      "sha256": "b1dbc9be496b1e75708f9db0bcd304d06ccaa035e7af552cbda3621febfcd31f"
+    },
+    {
+      "path": "lib/extract.ts",
+      "size_bytes": 6093,
+      "sha256": "954bb84f7eff83814e933abd6cf1ec5a91e4af94d5b447a0079d812835d0b0fc"
+    },
+    {
+      "path": "db/schema.ts",
+      "size_bytes": 1461,
+      "sha256": "03899775d6cbe04a879de3b89b1e984fe72d65b21f7ec2fa91c951a00dbf3372"
+    },
+    {
+      "path": "db/index.ts",
+      "size_bytes": 423,
+      "sha256": "dc7610b00b918e0ffff1360a63626f16655ced3064b2eaf96095a4101fb14bcd"
+    },
+    {
+      "path": "drizzle/0000_quiet_meggan.sql",
+      "size_bytes": 1175,
+      "sha256": "a83992354148c3200bab2ce3031cdb0c738af3d8d15f6d788c2ac5122294cb9f"
+    },
+    {
+      "path": "worker/index.ts",
+      "size_bytes": 1303,
+      "sha256": "a0a10229cdda6f5fdb32234e3539007412233bb4938a671866c9295a44a3bdb6"
+    },
+    {
+      "path": "app/api/calendar/[action]/route.ts",
+      "size_bytes": 7968,
+      "sha256": "b8b9b71c414a6c5cb481a141253c1e259b582c755438db5f94656150d3b1e8f0"
+    },
+    {
+      "path": "app/api/export/route.ts",
+      "size_bytes": 1734,
+      "sha256": "cc4601c0119f6c4939ebc443b859e3270547dd7c37739c59df2ef86843b185da"
+    },
+    {
+      "path": "app/api/extract/route.ts",
+      "size_bytes": 1018,
+      "sha256": "0926af3bbf67d9095281508d9725660a6c44905d80b05baea5d536b2a46fc35b"
+    },
+    {
+      "path": "app/api/files/route.ts",
+      "size_bytes": 1947,
+      "sha256": "410f64e05f224bd6e9e99b16c9cb1c5836db2fa9af4ff9f089c06b41144e7272"
+    },
+    {
+      "path": "app/api/import/route.ts",
+      "size_bytes": 1756,
+      "sha256": "5942b295a47841288140a2f1194835d59e9628aa7b1f0515fde09e6422654a36"
+    },
+    {
+      "path": "app/api/records/route.ts",
+      "size_bytes": 700,
+      "sha256": "8209ce4a9b0f0d1d2b375824de904e5236b06e2aa67cb5d8290742959e5f0c61"
+    },
+    {
+      "path": "app/api/workspace/route.ts",
+      "size_bytes": 1172,
+      "sha256": "0028fbb6c9f3f7282a6fe5590404a63352f000333479c4395c55067376146730"
+    }
+  ]
+}

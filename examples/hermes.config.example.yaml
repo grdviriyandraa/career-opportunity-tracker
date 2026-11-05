@@ -1,0 +1,17 @@
+# Proposed project adapter configuration. No executable bridge is bundled yet.
+# Merge into the actual Hermes profile config; replace all Windows paths.
+mcp_servers:
+  career_tracker:
+    command: 'C:/Program Files/nodejs/node.exe'
+    args:
+      - 'C:/Work/career-opportunity-tracker/tools/tracker-mcp/dist/index.js'
+    env:
+      TRACKER_API_BASE_URL: 'http://127.0.0.1:3000'
+      TRACKER_API_TOKEN_FILE: 'C:/Users/REPLACE_USER/AppData/Local/career-tracker/agent-token.txt'
+      TRACKER_INTENT_LEDGER_DIR: 'C:/Users/REPLACE_USER/AppData/Local/career-tracker/intents'
+    tools:
+      include: [search_opportunities, get_opportunity, get_upcoming_deadlines, create_draft]
+      resources: false
+      prompts: false
+# Telegram/provider setup belongs to the Hermes wizard, not to this MCP block.
+# Effective built-in Telegram tools must also be restricted using hermes tools.

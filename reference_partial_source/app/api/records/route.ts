@@ -1,0 +1,3 @@
+import {owner,json,fail,body,saveRecord,getIntegration,backup,putIntegration} from '@/lib/server';
+export const dynamic='force-dynamic';
+export async function POST(req:Request){try{const u=await owner(req,true),b=await body(req);const record=await saveRecord(u.userId,b.record,b.expectedRevision,b.action);let backupWarning='';const date=new Date().toISOString().slice(0,10),last=await getIntegration(u.userId,'backup-status');if(last?.date!==date){try{const s=await backup(u.userId);await putIntegration(u.userId,'backup-status',{date,...s});}catch{backupWarning='Peluang tersimpan; backup belum berhasil. Buat backup dari Pengaturan.'}}return json({record,backupWarning})}catch(e){return fail(e)}}

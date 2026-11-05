@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "request_id": "synthetic-request-001",
+  "data_as_of": "2026-11-05T02:00:00Z",
+  "timezone": "Asia/Jakarta",
+  "items": [
+    {
+      "id": "00000000-0000-4000-8000-000000000101",
+      "category": "job",
+      "title": "Business Analyst Intern Demo",
+      "organization": "Example Company",
+      "personal_stage": "saved",
+      "posting_status": "unknown",
+      "eligibility": "pending_verification",
+      "employer_hours": null,
+      "revision": 1,
+      "app_url": "http://localhost:3000/opportunities/00000000-0000-4000-8000-000000000101",
+      "evidence": [
+        {
+          "source_url": "https://jobs.example.org/role?id=DEMO-101",
+          "source_checked_at": "2026-11-01T02:00:00Z"
+        }
+      ]
+    }
+  ],
+  "next_cursor": null,
+  "warnings": [
+    "Employer hours unknown; source not freshly verified"
+  ],
+  "partial": false
+}

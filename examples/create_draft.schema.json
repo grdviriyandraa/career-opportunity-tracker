@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "create_draft tool input",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "source_url": {
+      "type": "string",
+      "format": "uri",
+      "maxLength": 2048
+    },
+    "source_text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 20000
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "job",
+        "bootcamp",
+        "competition"
+      ]
+    }
+  },
+  "anyOf": [
+    {
+      "required": [
+        "source_url"
+      ]
+    },
+    {
+      "required": [
+        "source_text"
+      ]
+    },
+    {
+      "required": [
+        "title"
+      ]
+    }
+  ]
+}
