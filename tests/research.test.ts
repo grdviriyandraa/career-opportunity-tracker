@@ -39,7 +39,7 @@ beforeAll(async () => {
   f = await fixture();
   await seedExisting(db);
 });
-afterAll(async () => db.close());
+afterAll(async () => db?.close());
 describe("strict research boundary", () => {
   it("rejects personal payloads, duplicate IDs, wrong sums, invalid source time and nested fields", () => {
     const b = adaptRun(f.runs[0]);

@@ -48,6 +48,8 @@ npm run start
 
 `npm test` menguji schema/identity dan menjalankan migrasi, RLS, transaksi serta rollback pada PostgreSQL PGlite. Fixtures seluruhnya sintetis. Build membatasi worker ke dua; tidak memerlukan Google, bot, database live, atau font eksternal.
 
+Perintah standar memakai satu worker Vitest untuk membatasi resource PostgreSQL WASM; tidak perlu menambah `--maxWorkers=1`. CI menjalankan test dengan `umask 022`. Fixture MCP mengikuti startup produksi dengan membuat file ledger privat sebelum SQLite membukanya; guard tetap menolak credential/ledger dengan izin terbuka. Mode `022` dan `077` sama-sama diuji.
+
 Browser tests, setelah build:
 
 ```sh

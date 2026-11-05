@@ -15,6 +15,7 @@ import {
   validateOrigin,
   loadConfig,
   readToken,
+  prepareLedgerFile,
   type BridgeConfig,
 } from "../tools/tracker-mcp/config";
 import { IntentLedger } from "../tools/tracker-mcp/ledger";
@@ -59,6 +60,8 @@ async function fixture(
     tokenFile,
     ledgerFile: path.join(dir, "ledger.sqlite"),
   };
+  // Match CLI startup: SQLite's own file creation inherits the caller's umask.
+  await prepareLedgerFile(config.ledgerFile);
   const ledger = new IntentLedger(config.ledgerFile);
   let closed = false;
   const closeLedger = () => {
@@ -186,6 +189,16 @@ describe("strict model boundary and trusted configuration", () => {
       TRACKER_LEDGER_FILE: f.config.ledgerFile,
     };
     expect((await loadConfig(env, process.cwd())).origin).toBe(f.config.origin);
+    if (process.platform !== "win32") {
+      await chmod(f.config.ledgerFile, 0o644);
+      await expect(loadConfig(env, process.cwd())).rejects.toThrow(
+        "PRIVATE_FILE_PERMISSIONS",
+      );
+      await expect(prepareLedgerFile(f.config.ledgerFile)).rejects.toThrow(
+        "PRIVATE_FILE_PERMISSIONS",
+      );
+      await chmod(f.config.ledgerFile, 0o600);
+    }
     await expect(
       loadConfig(
         { ...env, TRACKER_TOKEN_FILE: path.join(process.cwd(), ".env.local") },
