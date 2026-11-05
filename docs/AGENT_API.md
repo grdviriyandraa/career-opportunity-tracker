@@ -1,10 +1,10 @@
 # API agent dan credential Hermes
 
-WP06 menyediakan backend baca/draft dan pengelolaan credential di Settings. Diuji dengan PostgreSQL PGlite dan website/bridge MCP melalui transport Auth/PostgREST sintetis. Migrasi `20261105151101_agent_api.sql` **belum diterapkan ke Supabase hosted**. OTP/session hosted, restore isolation, Hermes Windows, Ollama dan Telegram tetap gate terpisah. Tidak ada panggilan model atau fallback cloud dalam fitur ini.
+WP06 menyediakan backend baca/draft dan pengelolaan credential di Settings. Diuji dengan PostgreSQL PGlite dan website/bridge MCP melalui transport Auth/PostgREST sintetis. Migrasi `20261105154620_agent_api.sql` **sudah diterapkan ke Supabase hosted** setelah persetujuan owner; checksum, schema/ACL dan penolakan Data API diverifikasi. Credential agent nyata belum diterbitkan. OTP/session hosted, restore isolation, Hermes Windows, Ollama dan Telegram tetap gate terpisah. Tidak ada panggilan model atau fallback cloud dalam fitur ini.
 
 ## Setup dan credential
 
-Pada project development existing, kedua migrasi core/research sudah diterapkan. Tinjau history dan terapkan hanya migrasi agent melalui workflow Supabase yang disetujui. Jangan mengulang migrasi lama atau memuat fixture pribadi/sintetis ke hosted. Tidak ada perubahan/publish environment yang diperlukan.
+Pada project development existing, ketiga migrasi core/research/agent sudah diterapkan. Jangan menjalankan ulang migrasi tersebut. Database development baru memakai file sesuai urutan history; tinjau target sebelum apply. Jangan memuat fixture pribadi/sintetis ke hosted. Tidak ada perubahan/publish environment yang diperlukan.
 
 Owner masuk ke website, membuka Settings, lalu memilih label, subset scope dan masa berlaku 1–30 hari. Scope tepat `opportunities:read`, `agenda:read`, `drafts:create`; maksimal 10 credential aktif. Token acak 256 bit dihasilkan server dan ditampilkan sekali. Simpan ke file privat di luar repository sesuai [panduan bridge](MCP_BRIDGE.md). Bila hasil penerbitan hilang, cabut credential melalui metadata dan buat penggantinya. Jangan memasukkan token ke chat, prompt, log, YAML atau argumen command.
 
@@ -43,4 +43,4 @@ Receipt tidak memiliki auto-expiry (retensi setidaknya 30 hari); housekeeping uk
 
 19 uji baru memeriksa otorisasi/scopes/expiry/revoke/banned/deleted, hash replay denial, grants/role isolation, rate limits, cross-channel dedup, receipt replay/conflict, proyeksi, unknown hours, paging, tanggal deadline dan rollback. Dua scenario browser desktop/390px menjalankan owner login sintetis, penerbitan token di Settings, SDK MCP stdio dengan keempat tool ke API yang diimplementasikan, lalu revoke; website tetap berfungsi. Semua akun, token dan data pengujian sintetis.
 
-Migrasi agent hosted dan credential nyata belum dibuat. Public signup masih aktif pada pemeriksaan terakhir; OTP delivery/session belum terverifikasi. Lengkapi gate hosted dan restore sebelum memakai grant dengan data pribadi, lalu jalankan pilot Windows/H19 dengan model lokal, biaya API Rp0 dan tanpa cloud fallback.
+Migrasi agent hosted sudah diverifikasi; jumlah credential/receipt agent masih nol. Live credential issuance/use belum diuji. Public signup masih aktif pada pemeriksaan terakhir; OTP delivery/session belum terverifikasi. Lengkapi gate hosted dan restore sebelum memakai grant dengan data pribadi, lalu jalankan pilot Windows/H19 dengan model lokal, biaya API Rp0 dan tanpa cloud fallback.

@@ -2,7 +2,7 @@
 
 Aplikasi pribadi Bahasa Indonesia untuk menyimpan peluang Jobs, Bootcamps dan Competitions. Implementasi awal menyediakan tujuh menu, email OTP owner, capture draft, daftar/pencarian, detail, update progres, arsip, milestone internal dan audit transaksional.
 
-**Status:** fondasi dan alur inti sedang diuji. Impor manual dengan preview, snapshot immutable, review field publik dan Agenda internal tersedia. Backend agent baca/draft, Settings credential dan bridge MCP diuji bersama melalui transport sintetis; migrasi agent belum diterapkan hosted. Koneksi Google Calendar/Sheets, recovery, recurrence dan live Telegram belum tersedia. Baca [STATUS.md](STATUS.md). Source di `reference_partial_source/` adalah arsip parsial yang tidak runnable, bukan aplikasi ini.
+**Status:** fondasi dan alur inti sedang diuji. Impor manual dengan preview, snapshot immutable, review field publik dan Agenda internal tersedia. Backend agent baca/draft, Settings credential dan bridge MCP diuji bersama melalui transport sintetis; migrasi agent sudah diterapkan hosted, credential live dan sesi OTP belum diuji. Koneksi Google Calendar/Sheets, recovery, recurrence dan live Telegram belum tersedia. Baca [STATUS.md](STATUS.md). Source di `reference_partial_source/` adalah arsip parsial yang tidak runnable, bukan aplikasi ini.
 
 ## Menjalankan
 

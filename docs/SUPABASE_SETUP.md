@@ -10,13 +10,13 @@
 - `.env.local` yang di-ignore dipulihkan dari email akun Auth terkonfirmasi dan publishable key publik; UUID owner tersedia dari runtime. Tidak ada service-role key yang diperlukan atau ditampilkan.
 - Website lokal dijalankan dengan `NODE_USE_ENV_PROXY=1 npm run start` pada Node 24 agar fetch Auth mengikuti proxy/TLS environment. Satu permintaan OTP owner diterima HTTP 200. Email delivery, template kode angka, verifikasi kode dan sesi website belum dibuktikan.
 - Pengaturan Auth publik menunjukkan signup masih aktif. Matikan public signup pada Dashboard sebelum acceptance owner-only. Bila email hanya memuat tautan, ubah template Magic Link agar memuat `{{ .Token }}`; jangan membagikan OTP atau tautan login ke chat.
-- Advisors memperingatkan enam fungsi SECURITY DEFINER yang sengaja menjadi API transaksi serta leaked-password protection disabled. Anonymous EXECUTE ditolak, search_path kosong dan guards owner diperiksa; warning tetap dicatat, bukan dinyatakan hilang. Lihat release evidence.
+- Advisors sesudah migrasi agent memberi warning pada sembilan authenticated dan dua anonymous SECURITY DEFINER RPC, serta leaked-password protection disabled. Dua RPC anonymous memerlukan credential opaque dengan scope/expiry/revoke/rate guard; RPC owner menolak anon dan semua helper privat menolak direct EXECUTE. Dua tabel privat baru memiliki INFO RLS tanpa policy yang sengaja deny-all. Search_path kosong dan ACL diperiksa; warning tetap dicatat, bukan dinyatakan hilang. Lihat release evidence.
 
 Project reference dan email sebenarnya hanya berada dalam konfigurasi lokal/draft, bukan contoh publik dokumen ini. Region yang diberikan owner belum diverifikasi melalui API.
 
 ## Empat jenis akses yang berbeda
 
-Kelanjutan WP06 menambahkan migrasi lokal `20261105151101_agent_api.sql` untuk endpoint/credential agent. Migrasi ini belum diterapkan hosted dan tidak termasuk dua migrasi awal yang sudah diverifikasi. Settings akan menampilkan pesan setup bila RPC agent belum tersedia. Lihat [AGENT_API.md](AGENT_API.md); tidak perlu menerbitkan ulang environment atau mengirim key baru.
+Kelanjutan WP06 menerapkan migrasi `20261105154620_agent_api.sql` untuk endpoint/credential agent setelah persetujuan owner. Ketiga migrasi sudah diverifikasi melalui checksum history; jangan apply ulang. Tabel privat memakai RLS dan menolak akses langsung, RPC memiliki explicit grants. Jumlah grant/receipt agent masih nol. Nomor file sebelumnya 20261105151101; nama lokal kini cocok dengan versi history MCP tanpa mengubah SQL/history hosted. Lihat [AGENT_API.md](AGENT_API.md); tidak perlu menerbitkan ulang environment atau mengirim key baru.
 
 | Akses                                      | Dipakai untuk                                          | Bukan pengganti               |
 | ------------------------------------------ | ------------------------------------------------------ | ----------------------------- |

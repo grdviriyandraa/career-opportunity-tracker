@@ -22,7 +22,7 @@ Untuk pembacaan live nanti, tool sumber tersebut perlu tersedia pada sesi. Previ
 
 ## Template dan pilot Hermes
 
-Backend agent dan Settings credential kini diuji lokal, tetapi migrasi `20261105151101_agent_api.sql` belum diterapkan hosted. Tinjau [API agent dan gate](AGENT_API.md) sebelum penerapan. Jangan memakai cookie owner, key Supabase atau grant nyata pada bridge sebelum gate hosted/restore selesai. Tidak diperlukan key baru lewat chat. Dua migrasi core/research existing tidak dijalankan ulang.
+Backend agent dan Settings credential sudah diuji lokal; migrasi `20261105154620_agent_api.sql` sudah diterapkan hosted dengan checksum dan ACL terverifikasi. Credential live/session dan restore tetap gate terpisah. Tinjau [API agent dan gate](AGENT_API.md) sebelum penerapan. Jangan memakai cookie owner, key Supabase atau grant nyata pada bridge sebelum gate hosted/restore selesai. Tidak diperlukan key baru lewat chat. Dua migrasi core/research existing tidak dijalankan ulang.
 
 Owner memilih melanjutkan desain aplikasi sekarang dan menyesuaikan Analytics Dashboard ketika sumber templatenya dapat diakses. Template asli belum dibaca atau digunakan; ini bukan blocker backend.
 

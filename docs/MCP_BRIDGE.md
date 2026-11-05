@@ -2,7 +2,7 @@
 
 Bridge stdio dapat dibangun dan diuji tanpa Supabase, Hermes, model atau Telegram. SDK resmi `@modelcontextprotocol/sdk@1.32.2` dipin pada dependency root dan satu package-lock. Runtime yang diuji Node 24.22.1; bridge memakai SQLite bawaan Node dan memerlukan Node >=22.13 dengan dukungan `node:sqlite`. Node dapat menulis experimental warning SQLite ke stderr; stdout tetap khusus protokol MCP.
 
-**Batas:** backend `/api/agent/*`, Settings credential, scopes/expiry/revocation dan rate limit WP06 kini tersedia dan diuji bersama bridge melalui website serta PostgreSQL sintetis. Migrasi agent belum diterapkan hosted. Cookie website atau key Supabase bukan credential bridge. Pilot Telegram, Windows, hosted Auth dan restore tetap pending; H01–H24 belum lulus keseluruhan. Lihat [API agent](AGENT_API.md).
+**Batas:** backend `/api/agent/*`, Settings credential, scopes/expiry/revocation dan rate limit WP06 kini tersedia dan diuji bersama bridge melalui website serta PostgreSQL sintetis. Migrasi agent sudah diterapkan hosted; schema/ACL dan penolakan credential tidak valid diverifikasi, tetapi grant nyata belum diterbitkan. Cookie website atau key Supabase bukan credential bridge. Pilot Telegram, Windows, hosted Auth dan restore tetap pending; H01–H24 belum lulus keseluruhan. Lihat [API agent](AGENT_API.md).
 
 ## Build dan verifikasi
 
