@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AgentSettings } from "./agent-settings";
 import { ArrowUpRight } from "./icons";
 import { Capture, Login, Logout } from "./forms";
 import { configuration, setupIssues } from "@/lib/config";
@@ -220,7 +221,9 @@ export function Milestones({ items }: { items: Milestone[] }) {
     </section>
   );
 }
-export function Settings() {
+export async function Settings() {
+  const { db } = await owner();
+  const grants = await db.rpc("list_agent_grants");
   return (
     <>
       <PageHeading
@@ -238,6 +241,7 @@ export function Settings() {
         </p>
         <Logout />
       </section>
+      <AgentSettings initialItems={grants.error ? null : grants.data} />
       <section className="card">
         <h2>Integrasi</h2>
         {[
@@ -248,10 +252,6 @@ export function Settings() {
           [
             "Google Sheets",
             "Belum terhubung. Impor snapshot JSON melalui preview tersedia di Inbox. Tracker riset existing tetap terpisah.",
-          ],
-          [
-            "Hermes / Telegram",
-            "Belum diimplementasikan. Tidak ada token agent aktif yang diterbitkan aplikasi.",
           ],
           [
             "Ekstraksi dan AI",

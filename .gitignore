@@ -10,3 +10,4 @@ test-results/
 next-env.d.ts
 
 tools/tracker-mcp/dist/
+supabase/.temp/

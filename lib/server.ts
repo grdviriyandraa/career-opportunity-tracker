@@ -1,6 +1,6 @@
 import "server-only";
 import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { configuration } from "./config";
 import type { Database } from "./database.types";
 export class HttpError extends Error {
@@ -45,6 +45,12 @@ export async function supabase() {
   );
 }
 export async function owner() {
+  if ((await headers()).has("authorization"))
+    throw new HttpError(
+      403,
+      "CREDENTIAL_CHANNEL",
+      "Gunakan sesi website untuk endpoint ini.",
+    );
   const c = configuration();
   const db = await supabase();
   const {
@@ -58,6 +64,12 @@ export async function owner() {
   return { db, user };
 }
 export function checkOrigin(req: Request) {
+  if (req.headers.has("authorization"))
+    throw new HttpError(
+      403,
+      "CREDENTIAL_CHANNEL",
+      "Gunakan sesi website untuk endpoint ini.",
+    );
   const c = configuration();
   if (!c)
     throw new HttpError(

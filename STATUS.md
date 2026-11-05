@@ -4,7 +4,7 @@ Baseline repository: `83161ffd53d4dda2099790f966332dc7cd3058e3` (historical hand
 
 ## Current scope
 
-WP00 audited; WP01–02, the internal Agenda subset of WP03, and the manual research/history subset of WP05 implemented. New standard Next.js application is separate from the legacy reference archive. Hosted migrations, confirmed Auth owner and singleton profile are now verified. G1 remains incomplete: signup is still enabled and OTP delivery/session verification plus authenticated website writes remain unverified. G2–G5 are not released. This is not the complete PRD or a production-ready tracker.
+WP00 audited; WP01–02, internal Agenda WP03, manual research/history WP05 and local agent/bridge WP06–07 subsets implemented. New standard Next.js application is separate from the legacy reference archive. Hosted migrations, confirmed Auth owner and singleton profile are now verified. G1 remains incomplete: signup is still enabled and OTP delivery/session verification plus authenticated website writes remain unverified. G2–G5 are not released. This is not the complete PRD or a production-ready tracker.
 
 Resumed setup on 5 November 2026 from `feat/tracker-core` / `43fe734`: network diagnostic exit 0; MCP OAuth completed. After explicit owner approval and inspection of the empty database, applied both existing migrations and provisioned one confirmed owner profile. Hosted role simulation: owner sees one profile; another authenticated UUID sees zero. Restored ignored local app configuration without displaying credentials. Local website OTP request returned HTTP 200; delivery, numeric email template and code/session verification remain pending. No opportunity seed/import, main merge, push, deployment or environment publication. See latest release evidence for scope and advisor findings.
 
@@ -18,8 +18,8 @@ Migration filenames now match MCP-generated hosted versions: `20261105143738_cor
 | WP03         | IN_PROGRESS                      | Paged owner reads (5,000-record synthetic fixture), coverage-aware internal Agenda UI/API, half-open overlap, buffers, date-only/conditional potential alerts, deadline proximity and IANA/DST tests. Recurrence/exceptions, cancellation, workload/capacity and reminders remain.                                                                                                |
 | WP04         | NOT_STARTED                      | Google OAuth, Calendar/FreeBusy, encryption, worker/scheduler, retry/conflict resolution and legacy cutover.                                                                                                                                                              |
 | WP05         | IN_PROGRESS                      | TESTED_MOCK subset: normalized JSON preview/apply, immutable R01–R04 snapshots, carry-forward, replay/correction quarantine, public field review, 300-row/rollback checks. Live Sheet/header parser, R05, correction acceptance, recovery, full export and backup remain. |
-| WP06         | NOT_STARTED                      | Agent API, scoped credential mint/revoke and rate limits. Website cookie API is not the agent API.                                                                                                                                                                        |
-| WP07         | IN_PROGRESS (local adapter)      | Four-tool stdio bridge, strict schemas, bounded HTTP adapter and durable SQLite intent ledger; isolated harness only. WP06 routes/grants and live Hermes remain unavailable.                                                                                                                                                                                                                      |
+| WP06 | TESTED_LOCAL (core subset) | Four agent endpoints, Settings mint/list/revoke, scoped opaque tokens, expiry/revocation/account-status checks, SQL rate windows, safe projections and transactional receipts. Agent migration and hosted acceptance pending; operational last-result audit/restore remain. |
+| WP07 | TESTED_LOCAL (bridge + API) | Real stdio MCP SDK calls all four tools through implemented website routes and synthetic Supabase/PGlite; revoke and cross-channel denial verified. Windows/Hermes/Telegram and hosted transport remain unverified. |
 | WP08         | BLOCKED (live); code NOT_STARTED | Windows Hermes, local Ollama, bot private-owner configuration and H19 require owner laptop. Runbook remains design, not execution evidence.                                                                                                                               |
 | WP09         | IN_PROGRESS (core checks only)   | Unit/database and browser harnesses. Full FR/INT/H/R acceptance not executed.                                                                                                                                                                                             |
 | WP10         | IN_PROGRESS                      | Runnable README, ADR, CI definition and environment instructions; feature branch pushed; no production release or main merge.                                                                                                                                                                       |
@@ -76,24 +76,24 @@ PARTIAL means only the listed core behavior exists; it does not mean the full FR
 | FR40 | Konfigurasi jujur             | PARTIAL — setup/errors and truthful integration states; provider health remains                           |
 | FR41 | Kesiapan GitHub               | PARTIAL — source/lockfile/CI/runbook and feature branch pushed; remote CI unknown, no release                                             |
 | FR42 | Capture tahan gagal           | PARTIAL — committed manual draft independent of extraction; extractor NOT_STARTED                         |
-| FR43 | Peran kanal                   | NOT_STARTED                                                                                               |
+| FR43 | Peran kanal | PARTIAL — bearer-only agent routes, cookie-only website/credential management; negative channel tests pass locally |
 | FR44 | Akun Telegram                 | NOT_STARTED                                                                                               |
-| FR45 | Jawaban berbasis data         | NOT_STARTED                                                                                               |
-| FR46 | Capture Telegram              | NOT_STARTED                                                                                               |
-| FR47 | Batas tindakan Hermes         | PARTIAL — bridge permits only four tools/strict inputs; backend enforcement and live channel remain pending                                                                                               |
-| FR48 | Retry capture                 | PARTIAL — local intent key survives failed response/restart; server transactional idempotency still pending                                                                                               |
+| FR45 | Jawaban berbasis data | PARTIAL — minimal read projection, unknown values and freshness warnings; model answers and full public evidence not tested |
+| FR46 | Capture Telegram | PARTIAL — MCP-to-agent capture tested locally; Telegram/gateway pilot not run |
+| FR47 | Batas tindakan Hermes | PARTIAL — four bridge tools and backend scopes enforced; no progress/Google/coding mutation; live channel pending |
+| FR48 | Retry capture | PARTIAL — local intent ledger plus transactional server receipts per integration, replay/conflict and web/agent dedup tested locally; hosted concurrency pending |
 | FR49 | Pemisahan runtime             | PARTIAL — standalone stdio bridge; no terminal/Google/GitHub tools. Live Hermes not tested                                                                                               |
 | FR50 | Kegagalan Hermes              | NOT_STARTED                                                                                               |
 | FR51 | Satu pemilik integrasi        | NOT_STARTED                                                                                               |
-| FR52 | Credential dan pencabutan     | NOT_STARTED                                                                                               |
+| FR52 | Credential dan pencabutan | PARTIAL — owner Settings, 256-bit token/hash storage, expiry/revoke/banned/deleted denial tested locally; no real grant issued |
 | FR53 | Model dan biaya               | NOT_STARTED                                                                                               |
-| FR54 | Health dan audit              | NOT_STARTED                                                                                               |
+| FR54 | Health dan audit | PARTIAL — credential last-successful-use and hermes_integration domain actor; no heartbeat, full operational result ledger or live health claim |
 | FR55 | Pemulihan dan perubahan versi | NOT_STARTED                                                                                               |
 | FR56 | Pilot Windows                 | NOT_STARTED                                                                                               |
 
 ## External configuration required
 
-The project URL, publishable key and owner email are now prepared in ignored local configuration and the draft. The current instance still reports configuration revision 1 with no custom allowed domains, despite the owner reporting settings already saved. A fresh task must select feat/tracker-core and its runtime policy must be checked before retrying MCP OAuth, owner UUID/profile and OTP delivery. Do not create a duplicate project. No secrets requested in chat. The app does not need a service-role key for CRUD.
+Network is now enforced with the required Supabase hosts; core/research migrations and owner/profile were verified in the prior checkpoint. Only OWNER_AUTH_USER_ID is runtime-bound; remaining app settings are in ignored local configuration. Public signup remains enabled, OTP delivery/session is unverified, and new agent migration 20261105151101_agent_api.sql has not been applied hosted. Do not replay the two existing migrations or publish the environment again. Website and agent routes do not require a service-role key.
 
 Live Google, Windows Hermes/Ollama and Telegram are separate later gates. No production credentials, Calendar events, Sheets writes, LLM calls, deployments or new research automations were created. Backup and 24/7 availability are not provided.
 
@@ -110,7 +110,7 @@ See docs/RESEARCH_IMPORT.md and docs/INPUTS_REQUIRED.md. The linked Analytics Da
 
 Research code is validated against synthetic inputs/transport. No private Sheet rows were imported and no Google/Telegram side effects occurred. R01–R04 coverage is limited to normalized batches, not live DAILY_RESEARCH_LOG parsing. R05 remains NOT_RUN. Run corrections are preserved for review but cannot yet replace accepted history.
 
-## Supabase project configuration checkpoint
+## Supabase project configuration checkpoint (historical; superseded above)
 
 Project metadata, publishable key and owner email have now been supplied and prepared in ignored local configuration plus the environment draft. Both official Supabase skills were installed and read. Codex global MCP registration succeeded and project scope was verified. The runtime still denies Supabase domains with proxy CONNECT 403; MCP login stopped at OAuth metadata discovery. No hosted migration, Auth provisioning, OTP email or live domain writes occurred. OWNER_AUTH_USER_ID remains pending verification. See docs/SUPABASE_SETUP.md for the precise steps. The pasted application secret was not stored or used.
 
@@ -120,10 +120,18 @@ Removed the first-1,000-row limitation with bounded keyset reads and initial/fin
 
 Pagination checkpoint checks: lint/typecheck/build PASS; 61 unit/database tests across 6 files PASS; 6 setup + 8 core/research/Agenda browser tests PASS. Live Supabase stays blocked on this instance; remote CI status remains unknown.
 
-## Offline bridge and network diagnostics continuation
+## Offline bridge and network diagnostics continuation (historical 43fe734 checkpoint)
 
 User explicitly requested parallel work independent of live Supabase. Added a local WP07 adapter against isolated synthetic HTTP, with official pinned MCP SDK, four strict tools, private credential-file configuration, response projection, bounded retries and durable pending-intent SQLite ledger. This is not WP06: no agent API, grant issuance/revocation, server rate limits or server idempotency schema was created. No token was issued and no bot/model was started. See docs/MCP_BRIDGE.md for exact supported commands and remaining gates.
 
 Network guide and no-credential diagnostic are in docs/CLOUD_NETWORK_TROUBLESHOOTING.md and scripts/cloud-network-check.mjs. Direct diagnostic returned PROXY_CONNECT_403 for all four Supabase hosts (expected exit 1). Current runtime remains revision 1 with no custom allowed hosts. No apply/restart/publish tool is exposed; opening a task with the correct published environment is a user-side action. This failure is separate from local bridge checks.
 
 Integrated continuation checks: frozen-lockfile install PASS, lint/typecheck PASS, build:mcp PASS (also built by npm test), 75 unit/database/adapter tests across 7 files PASS, website production build PASS, 6 setup + 8 core/research/Agenda browser tests PASS. Remote CI remains unverified. See docs/RELEASE_EVIDENCE.md.
+
+## Agent backend continuation
+
+Implemented local WP06 core with four strict /api/agent routes, owner Settings credential management, scoped hashed tokens, account-status/expiry/revocation checks and database rate windows. Cookie and bearer channels are explicitly separated. Shared persist_draft preserves website semantics and transactionality; per-integration receipts keep retry keys isolated, and exact URL duplicates preserve personal progress. Agent migration generated using pinned Supabase CLI 3.0.0, then validated against PGlite; not applied to hosted. No credential or tracker data was created remotely. See docs/AGENT_API.md for projection, pagination, retention and remaining gates.
+
+Validation: lint/typecheck, website/MCP build, 94 tests / 8 files and 16 browser tests passed. Rechecked two agent browser cases after Auth-status guard changes and 32 affected agent/research tests after replay-boundary validation. Synthetic transport and database evidence only; no hosted grant or bot readiness claim.
+
+Network diagnosis still exits 0; read-only public Auth settings still show signup enabled. No new OTP requested. Local acceptance uses synthetic Auth/PostgREST and actual database functions/stdio bridge. This does not prove hosted agent grants, delivery/session, Windows ACLs, Telegram identity, local-model capability, restore or H01–H24 completion. No environment publication, deployment, main merge or push performed.

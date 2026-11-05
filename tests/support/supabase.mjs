@@ -16,7 +16,7 @@ const user = {
 };
 const db = new PGlite();
 await db.exec(
-  `create role anon;create role authenticated;create schema auth;create table auth.users(id uuid primary key);create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;grant usage on schema auth to authenticated,anon;grant execute on function auth.uid() to authenticated,anon;`,
+  `create role anon;create role authenticated;create schema auth;create table auth.users(id uuid primary key,deleted_at timestamptz,banned_until timestamptz);create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;grant usage on schema auth to authenticated,anon;grant execute on function auth.uid() to authenticated,anon;`,
 );
 for (const file of (await readdir("supabase/migrations"))
   .filter((f) => f.endsWith(".sql"))
@@ -128,7 +128,11 @@ const server = http.createServer(async (req, res) => {
         user,
       });
     }
-    if (req.headers.authorization !== "Bearer " + token)
+    const agentRpc =
+      ["/rest/v1/rpc/agent_read", "/rest/v1/rpc/agent_capture"].includes(
+        url.pathname,
+      ) && req.headers.authorization === "Bearer synthetic-publishable-key";
+    if (!agentRpc && req.headers.authorization !== "Bearer " + token)
       return response(res, 401, { message: "Invalid test session" });
     if (url.pathname === "/auth/v1/user") return response(res, 200, user);
     if (url.pathname === "/auth/v1/logout") return response(res, 200, {});
@@ -136,12 +140,19 @@ const server = http.createServer(async (req, res) => {
       try {
         const result = await db.transaction(async (tx) => {
           await tx.query("select set_config('request.jwt.claim.sub',$1,true)", [
-            owner,
+            agentRpc ? "" : owner,
           ]);
-          await tx.exec("set local role authenticated");
+          await tx.exec(
+            agentRpc ? "set local role anon" : "set local role authenticated",
+          );
           if (url.pathname.includes("/rpc/")) {
             const name = url.pathname.split("/").at(-1);
             const args = {
+              list_agent_grants: [],
+              mint_agent_grant: ["p_token", "p_label", "p_scopes", "p_days"],
+              revoke_agent_grant: ["p_id"],
+              agent_read: ["p_token", "p_operation", "p_args"],
+              agent_capture: ["p_token", "p_payload", "p_key", "p_canonical"],
               resolve_research_proposal: [
                 "p_id",
                 "p_expected",

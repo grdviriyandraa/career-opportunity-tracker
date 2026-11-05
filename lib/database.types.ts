@@ -76,6 +76,20 @@ export type Database = {
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;
     Functions: {
+      list_agent_grants: {
+        Args: Record<string, never>;
+        Returns: import("./agent-protocol").GrantMetadata[];
+      };
+      mint_agent_grant: {
+        Args: {
+          p_token: string;
+          p_label: string;
+          p_scopes: string[];
+          p_days: number;
+        };
+        Returns: import("./agent-protocol").GrantMetadata;
+      };
+      revoke_agent_grant: { Args: { p_id: string }; Returns: boolean };
       resolve_research_proposal: {
         Args: {
           p_id: string;

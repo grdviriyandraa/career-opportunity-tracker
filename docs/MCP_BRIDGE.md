@@ -2,7 +2,7 @@
 
 Bridge stdio dapat dibangun dan diuji tanpa Supabase, Hermes, model atau Telegram. SDK resmi `@modelcontextprotocol/sdk@1.32.2` dipin pada dependency root dan satu package-lock. Runtime yang diuji Node 24.22.1; bridge memakai SQLite bawaan Node dan memerlukan Node >=22.13 dengan dukungan `node:sqlite`. Node dapat menulis experimental warning SQLite ke stderr; stdout tetap khusus protokol MCP.
 
-**Batas:** website belum memiliki `/api/agent/*`, penerbitan/revocation credential, scope enforcement atau rate limit WP06. Jangan memakai session cookie, Supabase key atau credential nyata untuk mencoba menutupi kekurangan backend. Tests di sini memakai HTTP backend sintetis, bukan bukti pilot Telegram, Windows atau integrasi live. H01–H24 belum dinyatakan lulus keseluruhan.
+**Batas:** backend `/api/agent/*`, Settings credential, scopes/expiry/revocation dan rate limit WP06 kini tersedia dan diuji bersama bridge melalui website serta PostgreSQL sintetis. Migrasi agent belum diterapkan hosted. Cookie website atau key Supabase bukan credential bridge. Pilot Telegram, Windows, hosted Auth dan restore tetap pending; H01–H24 belum lulus keseluruhan. Lihat [API agent](AGENT_API.md).
 
 ## Build dan verifikasi
 
@@ -16,7 +16,7 @@ npm test
 
 Output ada di `tools/tracker-mcp/dist/` (di-ignore Git). `npm test` membangun CLI terlebih dahulu lalu menjalankan Vitest. Lint mencakup source bridge; typecheck mencakup config NodeNext bridge dan aplikasi. Contract harness menjalankan mock HTTP loopback, official SDK client/stdin-stdout child process serta ledger sementara di luar repository. Tests tidak membuka port publik atau menghubungi backend hosted.
 
-## Konfigurasi trusted untuk saat backend WP06 tersedia
+## Konfigurasi trusted
 
 | Variabel                    | Nilai konfigurasi                                                                                        |
 | --------------------------- | -------------------------------------------------------------------------------------------------------- |
@@ -56,4 +56,4 @@ SQLite lokal memakai synchronous=full dan transaksi singkat sebelum HTTP capture
 
 Receipt valid menghapus pending intent; permintaan baru setelah hasil diketahui boleh mendapat key baru dan backend tetap wajib melakukan dedup identitas domain. Timeout, 5xx, receipt malformed atau kegagalan lain mempertahankan pending. Tidak ada auto-expiry pending: retensi minimum tujuh hari terpenuhi tanpa menghapus intent belum terkonfirmasi. Maksimal 1.000 pending intent; kapasitas penuh gagal tertutup tanpa eviction. SQLite memberi atomic commit dan recovery crash, tanpa lockfile proses buatan sendiri.
 
-Gunakan ledger khusus untuk origin/owner/integration yang sama. Jangan mengganti konfigurasi ke backend/owner lain atau menghapus ledger untuk melewati pending capture. Payload tidak disimpan, jadi setelah restart resubmit isi asli untuk rekonsiliasi key. Bridge tidak mempunyai trusted Telegram message/update ID dan tidak mengarang atribusi transport. Idempotensi server, concurrent web/agent capture, revoked/expired/wrong-scope denial dan restore isolation masih memerlukan implementasi serta acceptance backend WP06.
+Gunakan ledger khusus untuk origin/owner/integration yang sama. Jangan mengganti konfigurasi ke backend/owner lain atau menghapus ledger untuk melewati pending capture. Payload tidak disimpan, jadi setelah restart resubmit isi asli untuk rekonsiliasi key. Bridge tidak mempunyai trusted Telegram message/update ID dan tidak mengarang atribusi transport. Backend baru menguji receipt/idempotensi, dedup lintas kanal dan revoked/expired/wrong-scope denial secara lokal. Acceptance hosted, concurrency multi-connection nyata dan restore isolation tetap pending.

@@ -2,7 +2,7 @@
 
 Aplikasi pribadi Bahasa Indonesia untuk menyimpan peluang Jobs, Bootcamps dan Competitions. Implementasi awal menyediakan tujuh menu, email OTP owner, capture draft, daftar/pencarian, detail, update progres, arsip, milestone internal dan audit transaksional.
 
-**Status:** fondasi dan alur inti sedang diuji. Impor manual dengan preview, riwayat riset per run, dan review field publik tersedia. Agenda internal menyediakan pemeriksaan bentrok, buffer dan deadline berdekatan dengan cakupan yang terlihat. Bridge MCP lokal dapat dibangun dan diuji dengan backend sintetis. Koneksi Google Calendar/Sheets, recovery, recurrence, agent API dan live Telegram belum tersedia. Baca [STATUS.md](STATUS.md). Source di `reference_partial_source/` adalah arsip parsial yang tidak runnable, bukan aplikasi ini.
+**Status:** fondasi dan alur inti sedang diuji. Impor manual dengan preview, snapshot immutable, review field publik dan Agenda internal tersedia. Backend agent baca/draft, Settings credential dan bridge MCP diuji bersama melalui transport sintetis; migrasi agent belum diterapkan hosted. Koneksi Google Calendar/Sheets, recovery, recurrence dan live Telegram belum tersedia. Baca [STATUS.md](STATUS.md). Source di `reference_partial_source/` adalah arsip parsial yang tidak runnable, bukan aplikasi ini.
 
 ## Menjalankan
 
@@ -80,7 +80,7 @@ Stop dev/start dengan Ctrl-C; proses harus dijalankan ulang pada task baru. Data
 
 Dokumen historis pada root yang sudah ada sebelum implementasi dapat mengandung informasi pribadi. Jangan mem-publish ulang paket handoff mentah atau data tracker. Commit source baru secara selektif; jangan gunakan `git add .` tanpa review. Penghapusan dokumen dari commit baru tidak membersihkan riwayat Git existing.
 
-Google OAuth, scheduler/cutover legacy, Sheets, agent grants/MCP, Windows Ollama dan bot private-owner mengikuti backlog berikutnya. Belum ada token agent atau koneksi eksternal yang dibuat; tidak ada deployment produksi, merge ke main, atau push otomatis.
+Google OAuth, scheduler/cutover legacy, Sheets, pilot Windows Ollama dan bot private-owner mengikuti backlog berikutnya. Grant/API agent dan MCP diuji lokal; tidak ada credential agent nyata, deployment produksi, merge ke main atau push otomatis.
 
 ## Riwayat riset
 
@@ -100,6 +100,6 @@ Source terbaru ada di branch `feat/tracker-core` yang sudah di-push atas permint
 
 `npm run build:mcp` membangun CLI stdio dengan empat tool read/draft sesuai kontrak. `npm test` juga membangun bridge sebelum menguji adapter dengan HTTP sintetis dan SDK client nyata. Bridge diuji pada Node 24; runtime ini menyediakan SQLite lokal untuk ledger intent. Baca [konfigurasi dan batas bridge](docs/MCP_BRIDGE.md).
 
-API/grant agent backend belum tersedia: jangan menjalankan bridge menggunakan cookie website atau key Supabase. Token khusus agent akan diterbitkan setelah WP06 diimplementasikan. Config pada `examples/hermes.config.example.yaml` adalah proposal handoff historis; nama variabel implementasi bridge saat ini ada pada panduan baru. Hermes Windows, model lokal dan Telegram tetap perlu uji terpisah.
+Backend WP06 menyediakan empat `/api/agent/*` endpoint dan penerbitan/revocation credential di Settings setelah migrasi agent diterapkan. Baca [API agent dan gate hosted](docs/AGENT_API.md). Gunakan token khusus agent; cookie website dan key Supabase bukan credential bridge. Config `examples/hermes.config.example.yaml` adalah proposal handoff historis; variabel bridge aktual ada pada panduan baru. Hermes Windows, model lokal dan Telegram tetap perlu uji terpisah.
 
 Untuk blokir jaringan cloud, ikuti [langkah Environment dan diagnosis tanpa key](docs/CLOUD_NETWORK_TROUBLESHOOTING.md). Perintah `node scripts/cloud-network-check.mjs` membedakan penolakan proxy dari respons HTTP tanpa mencetak konfigurasi privat.

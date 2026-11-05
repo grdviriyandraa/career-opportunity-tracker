@@ -2,6 +2,8 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { configuration } from "./lib/config";
 export async function proxy(request: NextRequest) {
+  if (request.nextUrl.pathname.startsWith("/api/agent/"))
+    return NextResponse.next();
   let response = NextResponse.next({ request });
   const settings = configuration();
   if (!settings) return response;

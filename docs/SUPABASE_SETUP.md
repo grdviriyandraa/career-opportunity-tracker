@@ -16,6 +16,8 @@ Project reference dan email sebenarnya hanya berada dalam konfigurasi lokal/draf
 
 ## Empat jenis akses yang berbeda
 
+Kelanjutan WP06 menambahkan migrasi lokal `20261105151101_agent_api.sql` untuk endpoint/credential agent. Migrasi ini belum diterapkan hosted dan tidak termasuk dua migrasi awal yang sudah diverifikasi. Settings akan menampilkan pesan setup bila RPC agent belum tersedia. Lihat [AGENT_API.md](AGENT_API.md); tidak perlu menerbitkan ulang environment atau mengirim key baru.
+
 | Akses                                      | Dipakai untuk                                          | Bukan pengganti               |
 | ------------------------------------------ | ------------------------------------------------------ | ----------------------------- |
 | Publishable key                            | Client/data API; dipasangkan dengan sesi user dan RLS  | Admin SQL atau OAuth MCP      |
