@@ -29,3 +29,5 @@ Hermes tetap di Windows native, memakai model lokal dan anggaran API Rp0 tanpa c
 ## Pembaruan konfigurasi Supabase
 
 Owner sudah memberikan project, publishable key dan email. Nilai tersebut disiapkan dalam `.env.local` yang di-ignore serta draft environment; tidak ada secret key yang disimpan. MCP berhasil didaftarkan tetapi OAuth metadata discovery gagal karena endpoint Supabase ditolak proxy (CONNECT 403). User UID, migrasi hosted dan provisioning masih pending. Lihat docs/SUPABASE_SETUP.md. Owner melaporkan pengaturan sudah disimpan. Instance saat ini tetap melaporkan revision 1 tanpa custom allowed domains; ini perbedaan runtime dengan draft, bukan bukti owner belum menyimpan. Pada cloud task baru pilih branch feat/tracker-core, lalu periksa policy runtime sebelum melanjutkan OAuth/live checks.
+
+Untuk membuka blokir proxy tanpa mengulang pemberian key, ikuti [panduan Environment dan task baru](CLOUD_NETWORK_TROUBLESHOOTING.md). Pemeriksaan `node scripts/cloud-network-check.mjs` tidak mengirim API key.

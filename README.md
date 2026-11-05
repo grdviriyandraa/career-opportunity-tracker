@@ -2,7 +2,7 @@
 
 Aplikasi pribadi Bahasa Indonesia untuk menyimpan peluang Jobs, Bootcamps dan Competitions. Implementasi awal menyediakan tujuh menu, email OTP owner, capture draft, daftar/pencarian, detail, update progres, arsip, milestone internal dan audit transaksional.
 
-**Status:** fondasi dan alur inti sedang diuji. Impor manual dengan preview, riwayat riset per run, dan review field publik tersedia. Agenda internal menyediakan pemeriksaan bentrok, buffer dan deadline berdekatan dengan cakupan yang terlihat. Koneksi Google Calendar/Sheets, recovery, recurrence, agent API, MCP dan live Telegram belum tersedia. Baca [STATUS.md](STATUS.md). Source di `reference_partial_source/` adalah arsip parsial yang tidak runnable, bukan aplikasi ini.
+**Status:** fondasi dan alur inti sedang diuji. Impor manual dengan preview, riwayat riset per run, dan review field publik tersedia. Agenda internal menyediakan pemeriksaan bentrok, buffer dan deadline berdekatan dengan cakupan yang terlihat. Bridge MCP lokal dapat dibangun dan diuji dengan backend sintetis. Koneksi Google Calendar/Sheets, recovery, recurrence, agent API dan live Telegram belum tersedia. Baca [STATUS.md](STATUS.md). Source di `reference_partial_source/` adalah arsip parsial yang tidak runnable, bukan aplikasi ini.
 
 ## Menjalankan
 
@@ -93,3 +93,11 @@ Setup Supabase untuk checkpoint saat ini sudah dimulai: lihat [status MCP, jarin
 Buka Agenda untuk memilih tanggal mulai, rentang 1–180 hari dan buffer sebelum/sesudah. Acara dengan jam pasti dapat menghasilkan bentrok pasti; tanggal saja atau kehadiran bersyarat menghasilkan potensi bentrok. Deadline memiliki peringatan kedekatan tersendiri dan tidak dihitung sebagai durasi kerja. Cakupan internal dan keterbatasan kalender eksternal selalu ditampilkan. Pembacaan bertahap mencakup lebih dari 1.000 milestone; batas atau perubahan jumlah data saat pemeriksaan diberi peringatan. Lihat [aturan dan batas Agenda](docs/AGENDA.md).
 
 Source terbaru ada di branch `feat/tracker-core` yang sudah di-push atas permintaan owner. Pilih branch tersebut saat membuka cloud task baru; main belum di-merge.
+
+## Bridge MCP lokal untuk Hermes
+
+`npm run build:mcp` membangun CLI stdio dengan empat tool read/draft sesuai kontrak. `npm test` juga membangun bridge sebelum menguji adapter dengan HTTP sintetis dan SDK client nyata. Bridge diuji pada Node 24; runtime ini menyediakan SQLite lokal untuk ledger intent. Baca [konfigurasi dan batas bridge](docs/MCP_BRIDGE.md).
+
+API/grant agent backend belum tersedia: jangan menjalankan bridge menggunakan cookie website atau key Supabase. Token khusus agent akan diterbitkan setelah WP06 diimplementasikan. Config pada `examples/hermes.config.example.yaml` adalah proposal handoff historis; nama variabel implementasi bridge saat ini ada pada panduan baru. Hermes Windows, model lokal dan Telegram tetap perlu uji terpisah.
+
+Untuk blokir jaringan cloud, ikuti [langkah Environment dan diagnosis tanpa key](docs/CLOUD_NETWORK_TROUBLESHOOTING.md). Perintah `node scripts/cloud-network-check.mjs` membedakan penolakan proxy dari respons HTTP tanpa mencetak konfigurasi privat.

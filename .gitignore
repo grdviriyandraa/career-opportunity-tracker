@@ -8,3 +8,5 @@ test-results/
 *.tsbuildinfo
 .private/
 next-env.d.ts
+
+tools/tracker-mcp/dist/

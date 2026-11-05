@@ -21,6 +21,8 @@ Project reference dan email sebenarnya hanya berada dalam konfigurasi lokal/draf
 
 CRUD aplikasi tidak memerlukan secret key/service-role. Secret key yang dibagikan lewat chat perlu dicabut/dirotasi di dashboard API Keys; jangan kirim penggantinya di chat. Tidak perlu membuat key server baru hanya untuk menjalankan CRUD ini.
 
+Panduan panel Environment, diagnosis tanpa key dan langkah jika task tetap memakai versi lama ada di [CLOUD_NETWORK_TROUBLESHOOTING.md](CLOUD_NETWORK_TROUBLESHOOTING.md).
+
 ## Langkah untuk membuka blocker jaringan
 
 Domain yang sudah disimpan ke draft Environment Settings:
