@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AgentSettings } from "./agent-settings";
 import { MilestoneControls } from "./milestone-controls";
+import { OwnerExport } from "./owner-export";
 import { ArrowUpRight } from "./icons";
 import { Capture, Login, Logout } from "./forms";
 import { configuration, setupIssues } from "@/lib/config";
@@ -260,6 +261,7 @@ export async function Settings() {
         </p>
         <Logout />
       </section>
+      <OwnerExport />
       <AgentSettings initialItems={grants.error ? null : grants.data} />
       <section className="card">
         <h2>Integrasi</h2>

@@ -7,6 +7,7 @@ export default defineConfig({
     "agenda.spec.ts",
     "agent.spec.ts",
     "milestone.spec.ts",
+    "export.spec.ts",
   ],
   workers: 1,
   use: {

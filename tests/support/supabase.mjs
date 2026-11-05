@@ -85,6 +85,21 @@ await db.query(
    from generate_series(1,5000) i`,
   [owner],
 );
+// Export acceptance: long history and an inactive milestone must remain downloadable.
+await db.query(
+  `insert into change_history(id,owner_id,opportunity_id,operation,before_value,after_value)
+   select ('fffffff0-0000-4000-8000-' || lpad(i::text,12,'0'))::uuid,$1,
+   '00000000-0000-4000-8000-000000005000'::uuid,'synthetic_export_history',
+   jsonb_build_object('notes','before ' || i),jsonb_build_object('notes','after ' || i)
+   from generate_series(1,355) i`,
+  [owner],
+);
+await db.query(
+  `insert into milestones(id,owner_id,opportunity_id,title,kind,precision,date,timezone,attendance,cancelled_at)
+   values('fffffffe-0000-4000-8000-000000005001',$1,'00000000-0000-4000-8000-000000005000',
+   'Synthetic cancelled export milestone','deadline','date','2024-01-01','Asia/Jakarta','unknown','2025-01-01')`,
+  [owner],
+);
 const encode = (o) => Buffer.from(JSON.stringify(o)).toString("base64url");
 const header = encode({ alg: "HS256", typ: "JWT" }),
   payload = encode({
@@ -182,6 +197,7 @@ const server = http.createServer(async (req, res) => {
               "change_history",
               "profiles",
               "research_runs",
+              "research_identities",
               "research_items",
               "research_corrections",
               "research_proposals",
@@ -191,6 +207,7 @@ const server = http.createServer(async (req, res) => {
           const values = [];
           const conditions = [];
           for (const key of [
+            "owner_id",
             "id",
             "opportunity_id",
             "category",
@@ -202,23 +219,24 @@ const server = http.createServer(async (req, res) => {
             "source_system",
             "status",
           ]) {
-            const filter = url.searchParams.get(key);
-            if (!filter) continue;
-            if (filter === "is.null") {
-              conditions.push(key + " is null");
-              continue;
+            // PostgREST combines repeated filters on the same column with AND.
+            for (const filter of url.searchParams.getAll(key)) {
+              if (filter === "is.null") {
+                conditions.push(key + " is null");
+                continue;
+              }
+              if (filter === "not.is.null") {
+                conditions.push(key + " is not null");
+                continue;
+              }
+              const split = filter.indexOf(".");
+              const op = { eq: "=", lt: "<", gt: ">", ilike: "ilike" }[
+                filter.slice(0, split)
+              ];
+              if (!op) throw new Error("Unsupported filter");
+              values.push(filter.slice(split + 1));
+              conditions.push(key + " " + op + " $" + values.length);
             }
-            if (filter === "not.is.null") {
-              conditions.push(key + " is not null");
-              continue;
-            }
-            const split = filter.indexOf(".");
-            const op = { eq: "=", lt: "<", gt: ">", ilike: "ilike" }[
-              filter.slice(0, split)
-            ];
-            if (!op) throw new Error("Unsupported filter");
-            values.push(filter.slice(split + 1));
-            conditions.push(key + " " + op + " $" + values.length);
           }
           const order = (url.searchParams.get("order") ?? "")
             .split(",")
@@ -233,6 +251,8 @@ const server = http.createServer(async (req, res) => {
                   "start_at",
                   "imported_at",
                   "external_id",
+                  "source_system",
+                  "owner_id",
                 ].includes(col)
               )
                 throw new Error("Unsupported order");
@@ -244,7 +264,7 @@ const server = http.createServer(async (req, res) => {
               );
             });
           const columns = url.searchParams.get("select") ?? "*";
-          if (!["*", "id,operation,created_at"].includes(columns))
+          if (columns !== "*" && !/^[a-z_]+(,[a-z_]+)*$/.test(columns))
             throw new Error("Unsupported columns");
           if (req.headers.prefer?.includes("count=exact")) {
             const total = (

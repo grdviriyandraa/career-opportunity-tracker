@@ -100,6 +100,12 @@ Detail peluang kini menyediakan edit, pembatalan dan pemulihan milestone dengan 
 
 Source terbaru ada di branch `feat/tracker-core` yang sudah di-push atas permintaan owner. Pilih branch tersebut saat membuka cloud task baru; main belum di-merge.
 
+## Ekspor data owner
+
+Settings menyediakan unduhan JSON untuk sembilan tabel aplikasi, termasuk peluang arsip, milestone dibatalkan, seluruh history dan data riset. Manifest versi dan checksum disertakan; error atau pembacaan tidak lengkap membatalkan unduhan. File mengandung data pribadi. Ekspor bertahap ini belum merupakan backup database atau format restore lengkap; lihat [isi, checksum dan batas ekspor](docs/OWNER_EXPORT.md).
+
+Model lokal, Hermes dan Telegram ditunda atas arahan owner; pengembangan website dapat berlanjut tanpa ketiganya. Kode agent/bridge existing tetap tersedia sebagai fitur opsional.
+
 ## Bridge MCP lokal untuk Hermes
 
 `npm run build:mcp` membangun CLI stdio dengan empat tool read/draft sesuai kontrak. `npm test` juga membangun bridge sebelum menguji adapter dengan HTTP sintetis dan SDK client nyata. Bridge diuji pada Node 24; runtime ini menyediakan SQLite lokal untuk ledger intent. Baca [konfigurasi dan batas bridge](docs/MCP_BRIDGE.md).

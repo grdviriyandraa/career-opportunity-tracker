@@ -16,7 +16,7 @@ Runtime terbaru hanya menyediakan binding OWNER_AUTH_USER_ID. Konfigurasi aplika
 
 ## Akses sumber live
 
-Pada sesi implementasi ini tool GitHub/Google Drive/Calendar/Spreadsheets dan read_thread tidak diekspos, walaupun ditandai dalam pesan. Ini bukan bukti akun belum terhubung. Read-only Git melalui proxy native berhasil; main masih 83161ffd53d4dda2099790f966332dc7cd3058e3. Tidak ada token GitHub baru yang diperlukan untuk pemeriksaan tersebut. Branch feat/tracker-core sudah berhasil di-push atas permintaan owner; main tidak di-merge. Status remote CI belum dapat dibaca karena api.github.com ditolak proxy.
+Pada sesi implementasi ini tool GitHub/Google Drive/Calendar/Spreadsheets dan read_thread tidak diekspos, walaupun ditandai dalam pesan. Ini bukan bukti akun belum terhubung. Read-only Git melalui proxy native berhasil; main masih 83161ffd53d4dda2099790f966332dc7cd3058e3. Tidak ada token GitHub baru yang diperlukan untuk pemeriksaan tersebut. Branch feat/tracker-core sudah berhasil di-push atas permintaan owner; main tidak di-merge. CI pada commit 5d0e4a1 sudah diverifikasi Success melalui halaman Actions publik yang diizinkan; api.github.com tetap ditolak proxy.
 
 Untuk pembacaan live nanti, tool sumber tersebut perlu tersedia pada sesi. Preview percakapan hanya konteks historis; bukan hasil verifikasi baru dan bukan seed produksi. Website tetap membutuhkan Google OAuth sendiri; koneksi ChatGPT bukan credential website. Google OAuth client/scopes, pilihan kalender, legacy cutover dan scheduler ditetapkan saat WP04, bukan dengan memberikan akses Calendar luas sekarang.
 
@@ -26,7 +26,7 @@ Backend agent dan Settings credential sudah diuji lokal; migrasi `20261105154620
 
 Owner memilih melanjutkan desain aplikasi sekarang dan menyesuaikan Analytics Dashboard ketika sumber templatenya dapat diakses. Template asli belum dibaca atau digunakan; ini bukan blocker backend.
 
-Hermes tetap di Windows native, memakai model lokal dan anggaran API Rp0 tanpa cloud fallback. Pemilihan tag/model dan live bot dilakukan pada laptop owner saat WP08. Tidak ada bot, token, inferensi atau receiver Telegram yang dibuat dari pekerjaan ini.
+Model lokal, Hermes dan Telegram ditunda atas arahan owner; kelanjutan website tidak bergantung pada pilot tersebut. Jika dilanjutkan nanti, Hermes tetap di Windows native, memakai model lokal dan anggaran API Rp0 tanpa cloud fallback. Pemilihan tag/model dan live bot dilakukan pada laptop owner saat WP08. Tidak ada bot, token, inferensi atau receiver Telegram yang dibuat dari pekerjaan ini.
 
 ## Pembaruan konfigurasi Supabase
 

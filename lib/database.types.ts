@@ -10,6 +10,8 @@ export type Json =
 type OpportunityRow = Opportunity & {
   owner_id: string;
   canonical_url: string | null;
+  arrangement: string | null;
+  remote_eligibility: string | null;
 };
 type MilestoneRow = Milestone & { owner_id: string; revision: number };
 type HistoryRow = {
@@ -41,6 +43,15 @@ export type Database = {
     Tables: {
       research_runs: ReadOnlyTable<ResearchRun & { owner_id: string }>;
       research_items: ReadOnlyTable<ResearchItem & { owner_id: string }>;
+      research_identities: ReadOnlyTable<{
+        owner_id: string;
+        source_system: string;
+        external_id: string;
+        opportunity_id: string;
+        first_seen_at: string | null;
+        source_checked_at: string | null;
+        public_snapshot: Json;
+      }>;
       research_corrections: ReadOnlyTable<{
         id: string;
         owner_id: string;
