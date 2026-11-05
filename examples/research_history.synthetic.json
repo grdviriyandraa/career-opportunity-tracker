@@ -1,0 +1,392 @@
+{
+  "purpose": "Synthetic UAT input, not a production import payload. Convert to source tab rows in the adapter test.",
+  "initial_personal_records": [
+    {
+      "external_id": "SYN-JOB-001",
+      "personal_stage": "researching",
+      "first_seen_at": "2026-11-03"
+    },
+    {
+      "external_id": "SYN-JOB-002",
+      "personal_stage": "researching",
+      "first_seen_at": "2026-11-03"
+    }
+  ],
+  "runs": [
+    {
+      "run_id": "SYN-RUN-1",
+      "as_of": "2026-11-04T18:28:00+07:00",
+      "records_reviewed": 16,
+      "added": 14,
+      "existing_enriched": 2,
+      "high_priority_active": 0,
+      "snapshot": {
+        "confirmed": 0,
+        "conditional": 2,
+        "pending": 2,
+        "ineligible": 6,
+        "closed": 6
+      },
+      "items": [
+        {
+          "external_id": "SYN-JOB-001",
+          "action": "enriched",
+          "organization": "Example Research",
+          "title": "Market Analyst",
+          "eligibility": "conditional",
+          "evidence_url": "https://jobs.example.org/role?id=1",
+          "first_seen_at": "2026-11-03",
+          "source_checked_at": "2026-11-04T18:28:00+07:00",
+          "published_at": null,
+          "official_deadline": null,
+          "posting_status": "unknown"
+        },
+        {
+          "external_id": "SYN-JOB-002",
+          "action": "enriched",
+          "organization": "Example Research",
+          "title": "Report Writer",
+          "eligibility": "conditional",
+          "evidence_url": "https://jobs.example.org/role?id=2",
+          "first_seen_at": "2026-11-03",
+          "source_checked_at": "2026-11-04T18:28:00+07:00",
+          "published_at": null,
+          "official_deadline": null,
+          "posting_status": "active_conditional"
+        },
+        {
+          "external_id": "SYN-JOB-003",
+          "action": "new",
+          "organization": "Example Organization 3",
+          "title": "Analyst role 3",
+          "eligibility": "pending",
+          "evidence_url": "https://jobs.example.org/role?id=3",
+          "first_seen_at": "2026-11-04",
+          "source_checked_at": "2026-11-04T18:28:00+07:00",
+          "published_at": null,
+          "official_deadline": null,
+          "posting_status": "unverified"
+        },
+        {
+          "external_id": "SYN-JOB-004",
+          "action": "new",
+          "organization": "Example Organization 4",
+          "title": "Analyst role 4",
+          "eligibility": "pending",
+          "evidence_url": "https://jobs.example.org/role?id=4",
+          "first_seen_at": "2026-11-04",
+          "source_checked_at": "2026-11-04T18:28:00+07:00",
+          "published_at": null,
+          "official_deadline": null,
+          "posting_status": "unverified"
+        },
+        {
+          "external_id": "SYN-JOB-005",
+          "action": "new",
+          "organization": "Example Organization 5",
+          "title": "Analyst role 5",
+          "eligibility": "ineligible",
+          "evidence_url": "https://jobs.example.org/role?id=5",
+          "first_seen_at": "2026-11-04",
+          "source_checked_at": "2026-11-04T18:28:00+07:00",
+          "published_at": null,
+          "official_deadline": null,
+          "posting_status": "unverified"
+        },
+        {
+          "external_id": "SYN-JOB-006",
+          "action": "new",
+          "organization": "Example Organization 6",
+          "title": "Analyst role 6",
+          "eligibility": "ineligible",
+          "evidence_url": "https://jobs.example.org/role?id=6",
+          "first_seen_at": "2026-11-04",
+          "source_checked_at": "2026-11-04T18:28:00+07:00",
+          "published_at": null,
+          "official_deadline": null,
+          "posting_status": "unverified"
+        },
+        {
+          "external_id": "SYN-JOB-007",
+          "action": "new",
+          "organization": "Example Organization 7",
+          "title": "Analyst role 7",
+          "eligibility": "ineligible",
+          "evidence_url": "https://jobs.example.org/role?id=7",
+          "first_seen_at": "2026-11-04",
+          "source_checked_at": "2026-11-04T18:28:00+07:00",
+          "published_at": null,
+          "official_deadline": null,
+          "posting_status": "unverified"
+        },
+        {
+          "external_id": "SYN-JOB-008",
+          "action": "new",
+          "organization": "Example Organization 8",
+          "title": "Analyst role 8",
+          "eligibility": "ineligible",
+          "evidence_url": "https://jobs.example.org/role?id=8",
+          "first_seen_at": "2026-11-04",
+          "source_checked_at": "2026-11-04T18:28:00+07:00",
+          "published_at": null,
+          "official_deadline": null,
+          "posting_status": "unverified"
+        },
+        {
+          "external_id": "SYN-JOB-009",
+          "action": "new",
+          "organization": "Example Organization 9",
+          "title": "Analyst role 9",
+          "eligibility": "ineligible",
+          "evidence_url": "https://jobs.example.org/role?id=9",
+          "first_seen_at": "2026-11-04",
+          "source_checked_at": "2026-11-04T18:28:00+07:00",
+          "published_at": null,
+          "official_deadline": null,
+          "posting_status": "unverified"
+        },
+        {
+          "external_id": "SYN-JOB-010",
+          "action": "new",
+          "organization": "Example Organization 10",
+          "title": "Analyst role 10",
+          "eligibility": "ineligible",
+          "evidence_url": "https://jobs.example.org/role?id=10",
+          "first_seen_at": "2026-11-04",
+          "source_checked_at": "2026-11-04T18:28:00+07:00",
+          "published_at": null,
+          "official_deadline": null,
+          "posting_status": "unverified"
+        },
+        {
+          "external_id": "SYN-JOB-011",
+          "action": "new",
+          "organization": "Example Organization 11",
+          "title": "Analyst role 11",
+          "eligibility": "closed",
+          "evidence_url": "https://jobs.example.org/role?id=11",
+          "first_seen_at": "2026-11-04",
+          "source_checked_at": "2026-11-04T18:28:00+07:00",
+          "published_at": null,
+          "official_deadline": null,
+          "posting_status": "closed"
+        },
+        {
+          "external_id": "SYN-JOB-012",
+          "action": "new",
+          "organization": "Example Organization 12",
+          "title": "Analyst role 12",
+          "eligibility": "closed",
+          "evidence_url": "https://jobs.example.org/role?id=12",
+          "first_seen_at": "2026-11-04",
+          "source_checked_at": "2026-11-04T18:28:00+07:00",
+          "published_at": null,
+          "official_deadline": null,
+          "posting_status": "closed"
+        },
+        {
+          "external_id": "SYN-JOB-013",
+          "action": "new",
+          "organization": "Example Organization 13",
+          "title": "Analyst role 13",
+          "eligibility": "closed",
+          "evidence_url": "https://jobs.example.org/role?id=13",
+          "first_seen_at": "2026-11-04",
+          "source_checked_at": "2026-11-04T18:28:00+07:00",
+          "published_at": null,
+          "official_deadline": null,
+          "posting_status": "closed"
+        },
+        {
+          "external_id": "SYN-JOB-014",
+          "action": "new",
+          "organization": "Example Organization 14",
+          "title": "Analyst role 14",
+          "eligibility": "closed",
+          "evidence_url": "https://jobs.example.org/role?id=14",
+          "first_seen_at": "2026-11-04",
+          "source_checked_at": "2026-11-04T18:28:00+07:00",
+          "published_at": null,
+          "official_deadline": null,
+          "posting_status": "closed"
+        },
+        {
+          "external_id": "SYN-JOB-015",
+          "action": "new",
+          "organization": "Example Organization 15",
+          "title": "Analyst role 15",
+          "eligibility": "closed",
+          "evidence_url": "https://jobs.example.org/role?id=15",
+          "first_seen_at": "2026-11-04",
+          "source_checked_at": "2026-11-04T18:28:00+07:00",
+          "published_at": null,
+          "official_deadline": null,
+          "posting_status": "closed"
+        },
+        {
+          "external_id": "SYN-JOB-016",
+          "action": "new",
+          "organization": "Example Organization 16",
+          "title": "Analyst role 16",
+          "eligibility": "closed",
+          "evidence_url": "https://jobs.example.org/role?id=16",
+          "first_seen_at": "2026-11-04",
+          "source_checked_at": "2026-11-04T18:28:00+07:00",
+          "published_at": null,
+          "official_deadline": null,
+          "posting_status": "closed"
+        }
+      ]
+    },
+    {
+      "run_id": "SYN-RUN-2",
+      "as_of": "2026-11-05T08:04:00+07:00",
+      "records_reviewed": 20,
+      "added": 4,
+      "existing_enriched": 4,
+      "high_priority_active": 0,
+      "snapshot": {
+        "confirmed": 0,
+        "conditional": 3,
+        "pending": 2,
+        "ineligible": 7,
+        "closed": 8
+      },
+      "items": [
+        {
+          "external_id": "SYN-JOB-001",
+          "action": "enriched",
+          "organization": "Example Research",
+          "title": "Market Analyst",
+          "eligibility": "conditional",
+          "evidence_url": "https://jobs.example.org/role?id=1",
+          "first_seen_at": "2026-11-03",
+          "source_checked_at": "2026-11-05T08:04:00+07:00",
+          "published_at": null,
+          "official_deadline": null,
+          "posting_status": "unknown"
+        },
+        {
+          "external_id": "SYN-JOB-002",
+          "action": "enriched",
+          "organization": "Example Research",
+          "title": "Report Writer",
+          "eligibility": "conditional",
+          "evidence_url": "https://jobs.example.org/role?id=2",
+          "first_seen_at": "2026-11-03",
+          "source_checked_at": "2026-11-05T08:04:00+07:00",
+          "published_at": null,
+          "official_deadline": null,
+          "posting_status": "unknown"
+        },
+        {
+          "external_id": "SYN-JOB-003",
+          "action": "enriched",
+          "organization": "Example Organization 3",
+          "title": "Analyst role 3",
+          "eligibility": "pending",
+          "evidence_url": "https://jobs.example.org/role?id=3",
+          "first_seen_at": "2026-11-04",
+          "source_checked_at": "2026-11-05T08:04:00+07:00",
+          "published_at": null,
+          "official_deadline": null,
+          "posting_status": "unverified"
+        },
+        {
+          "external_id": "SYN-JOB-016",
+          "action": "enriched",
+          "organization": "Example Organization 16",
+          "title": "Analyst role 16",
+          "eligibility": "closed",
+          "evidence_url": "https://jobs.example.org/role?id=16",
+          "first_seen_at": "2026-11-04",
+          "source_checked_at": "2026-11-05T08:04:00+07:00",
+          "published_at": null,
+          "official_deadline": null,
+          "posting_status": "closed"
+        },
+        {
+          "external_id": "SYN-JOB-017",
+          "action": "new",
+          "organization": "Example Organization 17",
+          "title": "Analyst role 17",
+          "eligibility": "conditional",
+          "evidence_url": "https://jobs.example.org/role?id=17",
+          "first_seen_at": "2026-11-05",
+          "source_checked_at": "2026-11-05T08:04:00+07:00",
+          "published_at": null,
+          "official_deadline": null,
+          "posting_status": "unknown"
+        },
+        {
+          "external_id": "SYN-JOB-018",
+          "action": "new",
+          "organization": "Example Organization 18",
+          "title": "Analyst role 18",
+          "eligibility": "closed",
+          "evidence_url": "https://jobs.example.org/role?id=18",
+          "first_seen_at": "2026-11-05",
+          "source_checked_at": "2026-11-05T08:04:00+07:00",
+          "published_at": null,
+          "official_deadline": null,
+          "posting_status": "closed"
+        },
+        {
+          "external_id": "SYN-JOB-019",
+          "action": "new",
+          "organization": "Example Organization 19",
+          "title": "Analyst role 19",
+          "eligibility": "closed",
+          "evidence_url": "https://jobs.example.org/role?id=19",
+          "first_seen_at": "2026-11-05",
+          "source_checked_at": "2026-11-05T08:04:00+07:00",
+          "published_at": null,
+          "official_deadline": null,
+          "posting_status": "closed"
+        },
+        {
+          "external_id": "SYN-JOB-020",
+          "action": "new",
+          "organization": "Example Organization 20",
+          "title": "Analyst role 20",
+          "eligibility": "ineligible",
+          "evidence_url": "https://jobs.example.org/role?id=20",
+          "first_seen_at": "2026-11-05",
+          "source_checked_at": "2026-11-05T08:04:00+07:00",
+          "published_at": null,
+          "official_deadline": null,
+          "posting_status": "unverified"
+        }
+      ]
+    }
+  ],
+  "non_run_sheet_rows_between_runs": [
+    [
+      "Search batch",
+      "Query coverage",
+      "Freshness window",
+      "Outcome"
+    ],
+    [
+      "S1",
+      "Example discovery",
+      "72h",
+      "Example candidate"
+    ]
+  ],
+  "expected_run2": {
+    "inventory": 20,
+    "fresh_checks": 8,
+    "carry_forward": 12,
+    "added": 4,
+    "enriched": 4,
+    "personal_mutations": 0,
+    "calendar_events_created": 0
+  },
+  "correction_case": {
+    "clone_run": "SYN-RUN-2",
+    "alter": "coverage",
+    "value": "Updated source note",
+    "expect": "new proposed revision before acceptance"
+  }
+}

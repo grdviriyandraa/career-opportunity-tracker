@@ -1,0 +1,13 @@
+node_modules/
+.next/
+.env*
+!.env.example
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+.private/
+next-env.d.ts
+
+tools/tracker-mcp/dist/
+supabase/.temp/

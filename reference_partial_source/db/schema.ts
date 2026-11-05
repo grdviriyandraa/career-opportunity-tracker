@@ -1,0 +1,7 @@
+import { sqliteTable, text, integer, primaryKey } from 'drizzle-orm/sqlite-core';
+export const opportunities = sqliteTable('opportunities', {id:text('id').notNull(),owner:text('owner').notNull(),kind:text('kind').notNull(),payload:text('payload').notNull(),revision:integer('revision').notNull().default(1),updatedAt:text('updated_at').notNull()},t=>[primaryKey({columns:[t.owner,t.id]})]);
+export const settings = sqliteTable('settings',{owner:text('owner').primaryKey(),payload:text('payload').notNull(),revision:integer('revision').notNull().default(1)});
+export const history = sqliteTable('history',{id:text('id').primaryKey(),owner:text('owner').notNull(),recordId:text('record_id').notNull(),action:text('action').notNull(),payload:text('payload').notNull(),createdAt:text('created_at').notNull()});
+export const integrations = sqliteTable('integrations',{owner:text('owner').notNull(),key:text('key').notNull(),payload:text('payload').notNull()},t=>[primaryKey({columns:[t.owner,t.key]})]);
+export const files = sqliteTable('files',{id:text('id').primaryKey(),owner:text('owner').notNull(),name:text('name').notNull(),mime:text('mime').notNull(),size:integer('size').notNull(),key:text('key').notNull(),createdAt:text('created_at').notNull()});
+export const snapshots = sqliteTable('snapshots',{id:text('id').primaryKey(),owner:text('owner').notNull(),key:text('key').notNull(),createdAt:text('created_at').notNull(),count:integer('count').notNull()});
