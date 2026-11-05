@@ -8,6 +8,36 @@ import {
 import type { Milestone } from "../lib/domain";
 const now = "2026-11-05T08:00:00Z";
 const base = { now, start: "2026-11-12", days: 2, timezone: "Asia/Jakarta" };
+it("keeps identical local dates in different source zones distinct in repeated inventories", () => {
+  const sample = (id: string, timezone: string): Milestone => ({
+    id,
+    opportunity_id: "synthetic",
+    title: id,
+    kind: "event",
+    precision: "date",
+    date: "2026-11-12",
+    start_at: null,
+    end_at: null,
+    timezone,
+    attendance: "unknown",
+  });
+  const rows = [
+    sample("jakarta", "Asia/Jakarta"),
+    sample("los-angeles", "America/Los_Angeles"),
+    sample("jakarta-again", "Asia/Jakarta"),
+    event("evening", "2026-11-12T20:00:00Z", "2026-11-12T21:00:00Z"),
+  ];
+  const report = analyseAgenda(rows, {
+    start: "2026-11-12",
+    days: 2,
+    timezone: "UTC",
+    now,
+  });
+  const paired = report.conflicts
+    .filter((c) => [c.first_id, c.second_id].includes("evening"))
+    .map((c) => [c.first_id, c.second_id].find((id) => id !== "evening"));
+  expect(paired).toEqual(["los-angeles"]);
+});
 function event(
   id: string,
   start: string,

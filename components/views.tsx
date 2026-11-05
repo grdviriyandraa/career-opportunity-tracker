@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AgentSettings } from "./agent-settings";
+import { MilestoneControls } from "./milestone-controls";
 import { ArrowUpRight } from "./icons";
 import { Capture, Login, Logout } from "./forms";
 import { configuration, setupIssues } from "@/lib/config";
@@ -156,7 +157,13 @@ export function OpportunityList({ items }: { items: Opportunity[] }) {
     </section>
   );
 }
-export function Milestones({ items }: { items: Milestone[] }) {
+export function Milestones({
+  items,
+  manage,
+}: {
+  items: Milestone[];
+  manage?: { opportunityRevision: number };
+}) {
   return (
     <section className="card">
       <div className="section-heading">
@@ -174,47 +181,59 @@ export function Milestones({ items }: { items: Milestone[] }) {
         </div>
       ) : (
         items.map((m) => (
-          <div className="agenda-row" key={m.id}>
-            <div>
-              <Link href={"/opportunities/" + m.opportunity_id}>
-                <strong>{m.title}</strong>
-              </Link>
-              <p>
-                {m.kind === "deadline" ? "Deadline" : "Acara"} ·{" "}
-                {m.attendance === "confirmed"
-                  ? "Terkonfirmasi"
-                  : m.attendance === "conditional"
-                    ? "Bersyarat"
-                    : "Partisipasi belum diketahui"}
-              </p>
+          <div key={m.id}>
+            <div className="agenda-row">
+              <div>
+                <Link href={"/opportunities/" + m.opportunity_id}>
+                  <strong>{m.title}</strong>
+                </Link>
+                <p>
+                  {m.kind === "deadline" ? "Deadline" : "Acara"} ·{" "}
+                  {m.cancelled_at && (
+                    <span className="badge">Dibatalkan · </span>
+                  )}
+                  {m.attendance === "confirmed"
+                    ? "Terkonfirmasi"
+                    : m.attendance === "conditional"
+                      ? "Bersyarat"
+                      : "Partisipasi belum diketahui"}
+                </p>
+              </div>
+              <div>
+                {m.precision === "date" ? (
+                  <>
+                    <time>{m.date}</time>
+                    <small>Jam belum diketahui</small>
+                  </>
+                ) : (
+                  <>
+                    <time>
+                      {new Intl.DateTimeFormat("id-ID", {
+                        dateStyle: "medium",
+                        timeStyle: "short",
+                        timeZone: m.timezone,
+                      }).format(new Date(m.start_at!))}
+                      {m.kind === "event" &&
+                        m.end_at &&
+                        " sampai " +
+                          new Intl.DateTimeFormat("id-ID", {
+                            dateStyle: "medium",
+                            timeStyle: "short",
+                            timeZone: m.timezone,
+                          }).format(new Date(m.end_at))}
+                    </time>
+                    <small>{m.timezone}</small>
+                  </>
+                )}
+              </div>
             </div>
-            <div>
-              {m.precision === "date" ? (
-                <>
-                  <time>{m.date}</time>
-                  <small>Jam belum diketahui</small>
-                </>
-              ) : (
-                <>
-                  <time>
-                    {new Intl.DateTimeFormat("id-ID", {
-                      dateStyle: "medium",
-                      timeStyle: "short",
-                      timeZone: m.timezone,
-                    }).format(new Date(m.start_at!))}
-                    {m.kind === "event" &&
-                      m.end_at &&
-                      " sampai " +
-                        new Intl.DateTimeFormat("id-ID", {
-                          dateStyle: "medium",
-                          timeStyle: "short",
-                          timeZone: m.timezone,
-                        }).format(new Date(m.end_at))}
-                  </time>
-                  <small>{m.timezone}</small>
-                </>
-              )}
-            </div>
+            {manage && (
+              <MilestoneControls
+                key={m.id + ":" + m.revision + ":" + manage.opportunityRevision}
+                milestone={m}
+                opportunityRevision={manage.opportunityRevision}
+              />
+            )}
           </div>
         ))
       )}

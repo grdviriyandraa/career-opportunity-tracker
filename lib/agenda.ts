@@ -61,19 +61,31 @@ export function localDayBounds(date: string, timezone: string) {
       .toString(),
   };
 }
-function sourceRange(item: Milestone): Range {
+function sourceRange(
+  item: Milestone,
+  zones: Set<string>,
+  days: Map<string, Range>,
+): Range {
   if (
     !["date", "instant"].includes(item.precision) ||
     !["deadline", "event"].includes(item.kind) ||
     !["confirmed", "conditional", "unknown"].includes(item.attendance)
   )
     throw new Error("Invalid milestone");
-  validZone(item.timezone);
+  if (!zones.has(item.timezone)) {
+    validZone(item.timezone);
+    zones.add(item.timezone);
+  }
   if (item.precision === "date") {
     if (!item.date || item.start_at || item.end_at)
       throw new Error("Invalid date-only milestone");
+    const key = JSON.stringify([item.timezone, item.date]);
+    const cached = days.get(key);
+    if (cached) return cached;
     const day = localDayBounds(item.date, item.timezone);
-    return { start: instant(day.start_at), end: instant(day.end_at) };
+    const range = { start: instant(day.start_at), end: instant(day.end_at) };
+    days.set(key, range);
+    return range;
   }
   if (!item.start_at || item.date) throw new Error("Missing instant");
   const start = instant(item.start_at);
@@ -150,14 +162,18 @@ export function analyseAgenda(
   const seen = new Set<string>();
   const invalidIds: string[] = [];
   const entries: Entry[] = [];
+  // Request-local bounds avoid repeated Intl/Temporal work for large dated inventories.
+  const zones = new Set<string>();
+  const days = new Map<string, Range>();
   for (const item of items) {
+    if (item.cancelled_at) continue;
     if (seen.has(item.id)) {
       invalidIds.push(item.id);
       continue;
     }
     seen.add(item.id);
     try {
-      const range = sourceRange(item);
+      const range = sourceRange(item, zones, days);
       const buffered =
         item.kind === "event"
           ? { start: range.start - before, end: range.end + after }
@@ -329,10 +345,7 @@ export function analyseAgenda(
       coverage_end: cache?.coverage_end ?? null,
     },
     partial: !internalComplete || cacheState !== "fresh" || externalTruncated,
-    limitations: [
-      "recurrence_not_supported",
-      "cancellation_state_not_supported",
-    ],
+    limitations: ["recurrence_not_supported"],
   };
 }
 export type AgendaReport = ReturnType<typeof analyseAgenda>;

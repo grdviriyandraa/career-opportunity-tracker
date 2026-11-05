@@ -223,8 +223,7 @@ export async function AgendaWorkspace({
         )}
         <p className="muted">
           Pemeriksaan saat ini memakai milestone tersimpan. Pengulangan sesi,
-          status pembatalan, workload mingguan dan Google FreeBusy belum
-          tersedia.
+          workload mingguan dan Google FreeBusy belum tersedia.
         </p>
       </section>
       <Alerts

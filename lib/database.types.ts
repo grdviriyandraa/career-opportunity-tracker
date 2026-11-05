@@ -76,6 +76,10 @@ export type Database = {
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;
     Functions: {
+      update_milestone: {
+        Args: { p_id: string; p_milestone: string; p_patch: Json };
+        Returns: MilestoneRow;
+      };
       list_agent_grants: {
         Args: Record<string, never>;
         Returns: import("./agent-protocol").GrantMetadata[];

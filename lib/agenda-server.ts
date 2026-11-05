@@ -22,6 +22,7 @@ export async function loadAgenda(
         let request = db
           .from("milestones")
           .select("*", count ? { count: "exact" } : {})
+          .is("cancelled_at", null)
           .order("id")
           .limit(limit);
         if (after) request = request.gt("id", after);
@@ -32,7 +33,8 @@ export async function loadAgenda(
       async () => {
         const result = await db
           .from("milestones")
-          .select("*", { count: "exact", head: true });
+          .select("*", { count: "exact", head: true })
+          .is("cancelled_at", null);
         dbError(result.error);
         return result.count;
       },

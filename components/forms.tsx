@@ -8,6 +8,7 @@ import {
   stageLabels,
   stages,
   type Opportunity,
+  type Milestone,
 } from "@/lib/domain";
 async function send(
   url: string,
@@ -390,21 +391,30 @@ export function EditOpportunity({ item }: { item: Opportunity }) {
     </form>
   );
 }
-export function AddMilestone({
+export function MilestoneForm({
   id,
   revision,
+  milestone,
 }: {
   id: string;
   revision: number;
+  milestone?: Milestone & { revision: number };
 }) {
   const router = useRouter();
-  const [precision, setPrecision] = useState("date");
-  const [kind, setKind] = useState("deadline");
+  const [precision, setPrecision] = useState<string>(
+    milestone?.precision ?? "date",
+  );
+  const [kind, setKind] = useState<string>(milestone?.kind ?? "deadline");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const label = (name: string) =>
+    milestone ? "Edit " + name.toLowerCase() : name;
   return (
     <form
       className="card"
+      aria-label={
+        milestone ? "Ubah milestone: " + milestone.title : "Tambah milestone"
+      }
       onSubmit={async (e) => {
         e.preventDefault();
         setError("");
@@ -412,6 +422,9 @@ export function AddMilestone({
         const f = new FormData(e.currentTarget);
         const payload = {
           expected_revision: revision,
+          ...(milestone
+            ? { expected_milestone_revision: milestone.revision }
+            : {}),
           title: f.get("title"),
           kind,
           precision,
@@ -425,7 +438,14 @@ export function AddMilestone({
               }),
         };
         try {
-          await send("/api/opportunities/" + id + "/milestones", payload);
+          await send(
+            "/api/opportunities/" +
+              id +
+              "/milestones" +
+              (milestone ? "/" + milestone.id : ""),
+            payload,
+            milestone ? "PATCH" : "POST",
+          );
           router.refresh();
         } catch (e) {
           setError((e as Error).message);
@@ -434,74 +454,110 @@ export function AddMilestone({
         }
       }}
     >
-      <h2>Tambah milestone</h2>
-      <label>
-        Nama milestone
-        <input name="title" required maxLength={300} />
-      </label>
-      <div className="form-grid">
+      <h2>{milestone ? "Edit milestone" : "Tambah milestone"}</h2>
+      <fieldset disabled={busy}>
         <label>
-          Jenis
-          <select value={kind} onChange={(e) => setKind(e.target.value)}>
-            <option value="deadline">Deadline</option>
-            <option value="event">Acara</option>
-          </select>
+          {label("Nama milestone")}
+          <input
+            name="title"
+            defaultValue={milestone?.title ?? ""}
+            required
+            maxLength={300}
+          />
         </label>
-        <label>
-          Presisi
-          <select
-            value={precision}
-            onChange={(e) => setPrecision(e.target.value)}
-          >
-            <option value="date">Tanggal saja — jam belum diketahui</option>
-            <option value="instant">Waktu pasti dengan offset</option>
-          </select>
-        </label>
-        {precision === "date" ? (
+        <div className="form-grid">
           <label>
-            Tanggal
-            <input name="date" type="date" required />
+            {label("Jenis")}
+            <select value={kind} onChange={(e) => setKind(e.target.value)}>
+              <option value="deadline">Deadline</option>
+              <option value="event">Acara</option>
+            </select>
           </label>
-        ) : (
-          <>
+          <label>
+            {label("Presisi")}
+            <select
+              value={precision}
+              onChange={(e) => setPrecision(e.target.value)}
+            >
+              <option value="date">Tanggal saja — jam belum diketahui</option>
+              <option value="instant">Waktu pasti dengan offset</option>
+            </select>
+          </label>
+          {precision === "date" ? (
             <label>
-              Mulai (ISO dengan offset)
+              {label("Tanggal")}
               <input
-                name="start_at"
-                placeholder="2026-11-12T09:00:00+07:00"
+                name="date"
+                type="date"
+                defaultValue={milestone?.date ?? ""}
                 required
               />
             </label>
-            {kind === "event" && (
+          ) : (
+            <>
               <label>
-                Selesai (ISO dengan offset)
+                {label("Mulai (ISO dengan offset)")}
                 <input
-                  name="end_at"
-                  placeholder="2026-11-12T10:00:00+07:00"
+                  name="start_at"
+                  defaultValue={milestone?.start_at ?? ""}
+                  placeholder="2026-11-12T09:00:00+07:00"
                   required
                 />
               </label>
-            )}
-          </>
-        )}
-        <label>
-          Zona sumber
-          <input name="timezone" defaultValue="Asia/Jakarta" required />
-        </label>
-        <label>
-          Partisipasi
-          <select name="attendance">
-            <option value="unknown">Belum diketahui</option>
-            <option value="conditional">Bersyarat</option>
-            <option value="confirmed">Terkonfirmasi</option>
-          </select>
-        </label>
-      </div>
+              {kind === "event" && (
+                <label>
+                  {label("Selesai (ISO dengan offset)")}
+                  <input
+                    name="end_at"
+                    defaultValue={milestone?.end_at ?? ""}
+                    placeholder="2026-11-12T10:00:00+07:00"
+                    required
+                  />
+                </label>
+              )}
+            </>
+          )}
+          <label>
+            {label("Zona sumber")}
+            <input
+              name="timezone"
+              defaultValue={milestone?.timezone ?? "Asia/Jakarta"}
+              required
+            />
+          </label>
+          <label>
+            {label("Partisipasi")}
+            <select
+              name="attendance"
+              defaultValue={milestone?.attendance ?? "unknown"}
+            >
+              <option value="unknown">Belum diketahui</option>
+              <option value="conditional">Bersyarat</option>
+              <option value="confirmed">Terkonfirmasi</option>
+            </select>
+          </label>
+        </div>
+      </fieldset>
       <p className="muted">
         Tersimpan di agenda internal. Google Calendar belum terhubung.
       </p>
       <Feedback error={error} busy={busy} />
-      <button disabled={busy}>Tambah milestone</button>
+      <button disabled={busy}>
+        {milestone ? "Simpan perubahan milestone" : "Tambah milestone"}
+      </button>
+      {milestone && (
+        <button
+          type="button"
+          className="secondary"
+          disabled={busy}
+          onClick={() => router.refresh()}
+        >
+          Muat ulang / tinjau revisi milestone
+        </button>
+      )}
     </form>
   );
+}
+export function AddMilestone(props: { id: string; revision: number }) {
+  return <MilestoneForm {...props} />;
 }

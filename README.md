@@ -94,6 +94,8 @@ Setup Supabase untuk checkpoint saat ini sudah dimulai: lihat [status MCP, jarin
 
 Buka Agenda untuk memilih tanggal mulai, rentang 1–180 hari dan buffer sebelum/sesudah. Acara dengan jam pasti dapat menghasilkan bentrok pasti; tanggal saja atau kehadiran bersyarat menghasilkan potensi bentrok. Deadline memiliki peringatan kedekatan tersendiri dan tidak dihitung sebagai durasi kerja. Cakupan internal dan keterbatasan kalender eksternal selalu ditampilkan. Pembacaan bertahap mencakup lebih dari 1.000 milestone; batas atau perubahan jumlah data saat pemeriksaan diberi peringatan. Lihat [aturan dan batas Agenda](docs/AGENDA.md).
 
+Detail peluang kini menyediakan edit, pembatalan dan pemulihan milestone dengan guard revisi peluang + milestone. Milestone dibatalkan tetap memiliki riwayat dan dapat dipulihkan; dikecualikan dari Agenda aktif serta deadline agent. [Migrasi lifecycle dan batas Google](docs/MILESTONES.md) masih memerlukan penerapan hosted tersendiri; jangan replay tiga migrasi existing.
+
 Source terbaru ada di branch `feat/tracker-core` yang sudah di-push atas permintaan owner. Pilih branch tersebut saat membuka cloud task baru; main belum di-merge.
 
 ## Bridge MCP lokal untuk Hermes

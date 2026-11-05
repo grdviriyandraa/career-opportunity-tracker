@@ -27,6 +27,8 @@ Envelope read mempertahankan unknown/null, next_cursor, warnings dan partial. ap
 
 Pagination memakai UUID berurutan, bukan urutan deadline/kronologi. Cursor memuat posisi dan hash filter tervalidasi, tanpa credential. Perubahan filter/limit dengan cursor lama menghasilkan 400. Antarpage bersifat sequential, bukan snapshot atomik; next_cursor harus diikuti sebelum menyebut hasil lengkap. Date-only tetap tanpa jam; instant disaring menurut tanggal Asia/Jakarta. Deadline tool tidak memeriksa FreeBusy.
 
+Setelah [migrasi lifecycle milestone](MILESTONES.md) diterapkan, deadline yang dibatalkan di website dikecualikan dari hasil agent dan kembali terlihat jika dipulihkan. Migrasi lifecycle masih lokal pada checkpoint ini; guard/ACL dan empat tool agent tetap sama. Agent tidak mendapat izin edit/cancel/restore.
+
 ## Otorisasi dan transaksi
 
 Route agent memakai client Supabase anonymous baru dengan publishable key, tanpa cookie/JWT website. RPC agent_read dan agent_capture tersedia bagi role anon tetapi memvalidasi token mentah, hash, scope, expiry, revocation, profile dan status Auth owner (banned/deleted), serta rate limit di database. Hash tersimpan tidak dapat dipakai sebagai bearer. Tabel credential/receipt menolak akses langsung anon/authenticated dan memakai RLS tanpa policy publik. Helper privat dan public SECURITY DEFINER RPC memakai search_path kosong serta explicit EXECUTE grants. Tinjau advisors saat migrasi hosted; jangan memperluas grant untuk menghilangkan error. Tidak diperlukan service-role key.

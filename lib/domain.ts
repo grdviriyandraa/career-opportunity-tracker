@@ -129,6 +129,18 @@ export const milestoneSchema = z
         message: "Deadline adalah satu waktu, bukan durasi.",
       });
   });
+export const milestoneUpdateSchema = z.union([
+  milestoneSchema.safeExtend({
+    expected_milestone_revision: z.number().int().positive(),
+    // Editing is a complete schedule replacement; absence must not reset attendance.
+    attendance: z.enum(["confirmed", "conditional", "unknown"]),
+  }),
+  z.strictObject({
+    expected_revision: z.number().int().positive(),
+    expected_milestone_revision: z.number().int().positive(),
+    cancelled: z.boolean(),
+  }),
+]);
 export type Opportunity = {
   id: string;
   category: (typeof categories)[number] | null;
@@ -158,6 +170,8 @@ export type Milestone = {
   end_at: string | null;
   timezone: string;
   attendance: string;
+  revision?: number;
+  cancelled_at?: string | null;
 };
 export function overlaps(
   a: { start_at: string; end_at: string },

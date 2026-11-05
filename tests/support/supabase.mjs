@@ -164,6 +164,7 @@ const server = http.createServer(async (req, res) => {
               capture_draft: ["p_payload", "p_key", "p_canonical"],
               update_opportunity: ["p_id", "p_patch"],
               add_milestone: ["p_id", "p_payload"],
+              update_milestone: ["p_id", "p_milestone", "p_patch"],
             }[name];
             if (!args) throw new Error("RPC not supported");
             return (
@@ -194,6 +195,7 @@ const server = http.createServer(async (req, res) => {
             "opportunity_id",
             "category",
             "archived_at",
+            "cancelled_at",
             "created_at",
             "title",
             "research_run_id",

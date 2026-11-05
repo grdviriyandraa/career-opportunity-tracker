@@ -87,7 +87,10 @@ export default async function Detail({
           Periksa bentrok di Agenda →
         </Link>
       </p>
-      <Milestones items={milestones.data as Milestone[]} />
+      <Milestones
+        items={milestones.data as Milestone[]}
+        manage={{ opportunityRevision: item.revision }}
+      />
       <AddMilestone
         key={"milestone-" + item.revision}
         id={id}
@@ -105,11 +108,17 @@ export default async function Detail({
                   ? "Detail / progres diperbarui"
                   : h.operation === "milestone_added"
                     ? "Milestone ditambahkan"
-                    : h.operation === "research_capture"
-                      ? "Peluang diimpor dari riset"
-                      : h.operation === "research_public_approved"
-                        ? "Fakta sumber disetujui"
-                        : h.operation}
+                    : h.operation === "milestone_updated"
+                      ? "Milestone diperbarui"
+                      : h.operation === "milestone_cancelled"
+                        ? "Milestone dibatalkan"
+                        : h.operation === "milestone_restored"
+                          ? "Milestone dipulihkan"
+                          : h.operation === "research_capture"
+                            ? "Peluang diimpor dari riset"
+                            : h.operation === "research_public_approved"
+                              ? "Fakta sumber disetujui"
+                              : h.operation}
             </span>
             <time>
               {new Intl.DateTimeFormat("id-ID", {

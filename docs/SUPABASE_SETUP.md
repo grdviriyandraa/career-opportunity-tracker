@@ -14,6 +14,8 @@
 
 Project reference dan email sebenarnya hanya berada dalam konfigurasi lokal/draft, bukan contoh publik dokumen ini. Region yang diberikan owner belum diverifikasi melalui API.
 
+Source lokal selanjutnya menambahkan `20261105161819_milestone_lifecycle.sql` untuk edit/batal/pulih milestone dan pembacaan aktif. Migrasi keempat ini belum diterapkan hosted. Tiga migrasi existing tetap terverifikasi dan tidak dijalankan ulang. Tinjau [lifecycle milestone](MILESTONES.md) sebelum memakai Agenda source terbaru dengan database hosted.
+
 ## Empat jenis akses yang berbeda
 
 Kelanjutan WP06 menerapkan migrasi `20261105154620_agent_api.sql` untuk endpoint/credential agent setelah persetujuan owner. Ketiga migrasi sudah diverifikasi melalui checksum history; jangan apply ulang. Tabel privat memakai RLS dan menolak akses langsung, RPC memiliki explicit grants. Jumlah grant/receipt agent masih nol. Nomor file sebelumnya 20261105151101; nama lokal kini cocok dengan versi history MCP tanpa mengubah SQL/history hosted. Lihat [AGENT_API.md](AGENT_API.md); tidak perlu menerbitkan ulang environment atau mengirim key baru.
