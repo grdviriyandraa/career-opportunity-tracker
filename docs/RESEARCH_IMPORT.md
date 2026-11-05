@@ -6,8 +6,10 @@ Implementasi WP05 tahap pertama: normalized research JSON → preview tersimpan 
 
 Jalankan kedua migrasi dalam urutan nama file melalui Supabase SQL editor/admin migration connection:
 
-1. `supabase/migrations/202611050001_core.sql` (jika belum pernah diterapkan).
-2. `supabase/migrations/202611050002_research.sql`.
+1. `supabase/migrations/20261105143738_core.sql` (jika belum pernah diterapkan).
+2. `supabase/migrations/20261105143833_research.sql`.
+
+Versi file kini cocok dengan history hosted yang dibuat MCP pada setup awal. Keduanya sudah diterapkan pada project development existing; jangan jalankan ulang. File sebelumnya bernama `202611050001_core.sql` dan `202611050002_research.sql`; isi SQL tidak berubah. Periksa migration history serta checksum sebelum menyiapkan database lain.
 
 Jangan menjalankan kembali migrasi yang sudah diterapkan. Database uji dibuat fresh dan kedua migrasi sudah dieksekusi pada PostgreSQL/PGlite. Konfigurasi hosted serta pengiriman email masih perlu diuji dengan project owner.
 

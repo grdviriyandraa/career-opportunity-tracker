@@ -34,6 +34,8 @@ Jangan overwrite `.env.local` yang sudah ada. Aplikasi menampilkan panduan setup
 
 Supabase perlu dapat dijangkau melalui HTTPS oleh server. Dalam cloud dengan allowlist, tambahkan hostname project yang benar di environment settings setelah project dipilih. Tidak diperlukan akses Google untuk alur inti. Jangan kirim secrets di chat, commit `.env.local`, atau memakai database produksi pada tests.
 
+Checkpoint hosted 5 November: dua migrasi existing dan singleton profile owner sudah diterapkan serta diverifikasi. Nama file kini mengikuti versi history MCP (`20261105143738_core`, `20261105143833_research`); isi SQL sama dengan file lama. Jangan menerapkan ulang migrasi pada project existing. OTP request sudah diterima, tetapi delivery/session dan penutupan public signup masih menjadi gate. Detail di [SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md). Pada managed cloud Node 24, gunakan `NODE_USE_ENV_PROXY=1 npm run dev` atau `NODE_USE_ENV_PROXY=1 npm run start` agar fetch mengikuti proxy dan CA yang diwariskan; tidak perlu mengubah policy environment.
+
 ## Verifikasi
 
 ```sh

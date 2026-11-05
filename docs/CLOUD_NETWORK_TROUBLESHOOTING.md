@@ -1,5 +1,7 @@
 # Membuka akses Supabase pada Codex cloud
 
+Checkpoint terbaru 5 November: jaringan sudah terbuka pada instance baru; diagnosis exit 0, OAuth selesai, migrasi awal dan owner/profile sudah diverifikasi. Tidak perlu publish ulang environment. Uraian blokir di bawah adalah bukti historis; lihat [status setup terkini](SUPABASE_SETUP.md) untuk gate OTP dan signup yang tersisa.
+
 Pemeriksaan 5 November 2026 menunjukkan task ini masih memakai policy runtime revision 1, mode restricted/enforced, tanpa custom allowed hosts. File policy lokal juga belum mencantumkan host Supabase. Pengaturan yang sudah disimpan owner tidak otomatis membuktikan task lama memakai versi tersebut. Ini tidak membuktikan owner belum menyimpan atau project Supabase bermasalah. Diagnosis langsung dengan script di bawah menghasilkan `PROXY_CONNECT_403` pada keempat tujuan; exit 1 memang menandakan pemeriksaan jaringan gagal.
 
 ## Langkah di panel Environment

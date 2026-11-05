@@ -27,7 +27,7 @@ beforeAll(async () => {
     `create role anon;create role authenticated;create schema auth;create table auth.users(id uuid primary key);create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;grant usage on schema auth to authenticated,anon;grant execute on function auth.uid() to authenticated,anon;`,
   );
   await db.exec(
-    await readFile("supabase/migrations/202611050001_core.sql", "utf8"),
+    await readFile("supabase/migrations/20261105143738_core.sql", "utf8"),
   );
   await db.query("insert into auth.users values($1),($2)", [owner, stranger]);
   await db.query("insert into public.profiles(owner_id) values($1)", [owner]);

@@ -2,7 +2,7 @@
 
 ## Untuk memakai alur website live sekarang
 
-Project development, publishable key dan email owner sudah diberikan dan disiapkan dalam `.env.local` yang di-ignore. Tidak perlu membuat project baru. Aktivasi jaringan, OAuth MCP dan User UID owner masih diperlukan; lihat [status setup Supabase](SUPABASE_SETUP.md). Lima variabel konfigurasi referensi:
+Project development, publishable key dan email owner sudah dipulihkan ke `.env.local` yang di-ignore. Jaringan/OAuth MCP, UUID Auth terkonfirmasi, dua migrasi hosted dan singleton profile sudah diverifikasi pada 5 November 2026; lihat [status setup Supabase](SUPABASE_SETUP.md). Tidak perlu membuat project atau menerapkan migrasi ulang. Lima variabel konfigurasi referensi:
 
 - APP_URL: origin canonical browser website.
 - NEXT_PUBLIC_SUPABASE_URL: endpoint project development.
@@ -10,9 +10,9 @@ Project development, publishable key dan email owner sudah diberikan dan disiapk
 - OWNER_AUTH_USER_ID: UUID akun owner yang sudah diprovision.
 - OWNER_EMAIL: email owner untuk OTP.
 
-Nonaktifkan public signup, provision satu profiles row, konfigurasi email OTP, dan terapkan dua migration sesuai README/RESEARCH_IMPORT. Izinkan hostname Supabase yang benar di network settings bila restricted. Jangan kirim nilai secret di chat. Tidak perlu service-role key untuk CRUD website.
+Public signup masih aktif dan perlu dinonaktifkan di Dashboard. Periksa template Magic Link agar memuat `{{ .Token }}`, lalu verifikasi delivery kode dan sesi login melalui website. Satu permintaan OTP sudah diterima HTTP 200; hasil itu belum membuktikan login penuh. Jangan kirim nilai secret, OTP atau tautan login di chat. Tidak perlu service-role key untuk CRUD website.
 
-Kelima requirement sudah disimpan pada draft environment dari tahap sebelumnya. Observasi runtime saat pekerjaan ini masih tidak memiliki binding variabel/secret aplikasi; menyimpan draft bukan bukti konfigurasi sudah diterapkan.
+Runtime terbaru hanya menyediakan binding OWNER_AUTH_USER_ID. Konfigurasi aplikasi lainnya ada dalam file lokal yang di-ignore; file lokal dan OAuth tidak dijamin bertahan pada instance baru. Policy runtime sudah enforced dengan domain yang benar; environment tidak dipublikasikan ulang.
 
 ## Akses sumber live
 
@@ -28,6 +28,6 @@ Hermes tetap di Windows native, memakai model lokal dan anggaran API Rp0 tanpa c
 
 ## Pembaruan konfigurasi Supabase
 
-Owner sudah memberikan project, publishable key dan email. Nilai tersebut disiapkan dalam `.env.local` yang di-ignore serta draft environment; tidak ada secret key yang disimpan. MCP berhasil didaftarkan tetapi OAuth metadata discovery gagal karena endpoint Supabase ditolak proxy (CONNECT 403). User UID, migrasi hosted dan provisioning masih pending. Lihat docs/SUPABASE_SETUP.md. Owner melaporkan pengaturan sudah disimpan. Instance saat ini tetap melaporkan revision 1 tanpa custom allowed domains; ini perbedaan runtime dengan draft, bukan bukti owner belum menyimpan. Pada cloud task baru pilih branch feat/tracker-core, lalu periksa policy runtime sebelum melanjutkan OAuth/live checks.
+Checkpoint sebelumnya terblokir proxy CONNECT 403. Instance terbaru sudah mencapai endpoint Supabase dan OAuth selesai. Setelah persetujuan owner, migrasi awal diterapkan sekali dan profile diprovision; nomor file lokal sekarang cocok dengan history hosted. Lihat docs/SUPABASE_SETUP.md dan release evidence sebelum melanjutkan. Pada cloud task baru pilih branch feat/tracker-core, lalu periksa policy, registrasi/auth MCP, konfigurasi lokal dan history aktual sebelum melakukan write.
 
 Untuk membuka blokir proxy tanpa mengulang pemberian key, ikuti [panduan Environment dan task baru](CLOUD_NETWORK_TROUBLESHOOTING.md). Pemeriksaan `node scripts/cloud-network-check.mjs` tidak mengirim API key.

@@ -1,12 +1,16 @@
 # Supabase: aplikasi, MCP, dan owner
 
-## Status setup saat ini
+## Status setup saat ini — 5 November 2026
 
 - Dua skill resmi `supabase/agent-skills` dipasang sebagai copy di `.agents/skills/` dengan CLI `skills@1.7.6`. `skills-lock.json` mencatat source dan hash. Skill sudah dibaca; tidak mengubah dependency aplikasi.
-- Server Codex MCP global bernama `supabase` berhasil didaftarkan dan target project-nya diverifikasi melalui CLI.
-- `.env.local` yang di-ignore Git dibuat dari konfigurasi publik yang diberikan owner. Tidak ada secret key aplikasi yang disimpan. User UID owner masih kosong.
-- Endpoint Supabase ditolak proxy environment dengan CONNECT HTTP 403. Login MCP gagal pada discovery metadata OAuth, sebelum browser authorization selesai. Ini bukan bukti bahwa project rusak atau OAuth tidak didukung.
-- Domain dan nilai konfigurasi non-secret sudah tersimpan ke draft environment. Owner melaporkan pengaturan sudah disimpan, tetapi instance ini masih menggunakan revision 1 tanpa custom allowed domains; penerapan pada runtime ini belum terverifikasi. Tidak ada migrasi, provisioning user, email OTP, atau perubahan database live yang dijalankan.
+- Runtime terbaru running/connected dan policy restricted/enforced mengizinkan keempat host Supabase. Script diagnosis jaringan exit 0. Tidak perlu publish ulang environment.
+- OAuth MCP read-only selesai. Owner kemudian menyetujui OAuth database write, penerapan dua migrasi existing dan provisioning profile. OAuth write tersebut juga selesai; tidak meminta API key melalui chat.
+- Inspeksi awal menemukan satu akun Auth terkonfirmasi, tanpa tabel public atau migration history. Dua migrasi berhasil diterapkan sekali dan satu profile yang cocok dengan UUID owner terverifikasi dibuat. Owner melihat satu profile melalui simulasi role authenticated; UUID lain melihat nol.
+- Versi hosted: `20261105143738_core` dan `20261105143833_research`. Nama file lokal diselaraskan dengan versi ini; checksum SQL tidak berubah. Jangan menjalankan ulang SQL memakai nama file lama. Metadata history hosted tidak diubah.
+- `.env.local` yang di-ignore dipulihkan dari email akun Auth terkonfirmasi dan publishable key publik; UUID owner tersedia dari runtime. Tidak ada service-role key yang diperlukan atau ditampilkan.
+- Website lokal dijalankan dengan `NODE_USE_ENV_PROXY=1 npm run start` pada Node 24 agar fetch Auth mengikuti proxy/TLS environment. Satu permintaan OTP owner diterima HTTP 200. Email delivery, template kode angka, verifikasi kode dan sesi website belum dibuktikan.
+- Pengaturan Auth publik menunjukkan signup masih aktif. Matikan public signup pada Dashboard sebelum acceptance owner-only. Bila email hanya memuat tautan, ubah template Magic Link agar memuat `{{ .Token }}`; jangan membagikan OTP atau tautan login ke chat.
+- Advisors memperingatkan enam fungsi SECURITY DEFINER yang sengaja menjadi API transaksi serta leaked-password protection disabled. Anonymous EXECUTE ditolak, search_path kosong dan guards owner diperiksa; warning tetap dicatat, bukan dinyatakan hilang. Lihat release evidence.
 
 Project reference dan email sebenarnya hanya berada dalam konfigurasi lokal/draft, bukan contoh publik dokumen ini. Region yang diberikan owner belum diverifikasi melalui API.
 
@@ -47,6 +51,8 @@ Ganti `PROJECT_REF` dengan project yang diberikan owner. Kutip seluruh URL karen
 
 Untuk lingkungan headless, CLI yang terpasang mendukung `codex mcp login supabase --no-browser`. Ikuti flow browser dari CLI pada instance yang sama. Login pada laptop/instance lain tidak otomatis memberi credential ke cloud ini. Secret key aplikasi tidak boleh dipasang sebagai bearer token MCP.
 
+Browser laptop dapat berhenti pada `127.0.0.1:<port>/callback` dengan connection refused karena CLI berada di cloud. Jangan refresh atau mengulangi OAuth; URL callback dari flow yang sama harus diteruskan ke prompt `Callback URL (input hidden)` CLI cloud. Tekan Enter setelah menempelkannya. Callback merupakan kode sekali pakai; jangan commit/simpan ke dokumen, dan jangan sertakan access token atau API key. Login baru hanya diperlukan bila flow lama sudah kedaluwarsa.
+
 `/mcp` adalah perintah antarmuka Codex, bukan perintah Bash. Setelah OAuth selesai, refresh koneksi MCP dan pastikan tools terlihat. Registrasi server saja tidak membuktikan koneksi/auth siap. OAuth credential dan konfigurasi global tidak diasumsikan pulih pada task baru; startup instructions sudah mencatat verifikasi registrasi.
 
 ## Login owner dan database website
@@ -72,6 +78,4 @@ Data API dapat aktif, tetapi tabel tetap memerlukan explicit grants dan RLS. Jan
 
 ## Bukti dan batas verifikasi
 
-Registrasi MCP sudah berhasil. Koneksi Supabase live, OAuth MCP, User UID, migrasi dan real login masih BLOCKED oleh jaringan/authorization. Dokumen Supabase pada domain resmi juga terblokir; fallback path GitHub yang dicoba mengembalikan 404. Jangan menganggap changelog terkini sudah diverifikasi.
-
-Pemeriksaan aplikasi lokal hanya membuktikan konfigurasi non-secret terbaca dan menampilkan setup yang jujur ketika UUID owner belum tersedia. Tidak ada real tracker data atau synthetic seed yang dimasukkan ke project live.
+Koneksi live/OAuth, kedua migrasi dan owner/profile sudah diverifikasi pada instance terbaru. Changelog dan panduan OTP resmi dibaca. HTTP 200 pada permintaan OTP hanya membuktikan permintaan diterima provider; belum membuktikan delivery atau sesi login. Signup/template perlu ditinjau pada Dashboard. Tidak ada real tracker data atau synthetic seed yang dimasukkan ke project live.
