@@ -34,6 +34,14 @@ test("all seven menus show honest setup state without credentials", async ({
 test("public and spoofed requests cannot read or save data", async ({
   request,
 }) => {
+  const health = await request.get("/api/health");
+  expect(health.status()).toBe(503);
+  expect(await health.json()).toEqual({
+    status: "setup_required",
+    scope: "process_and_configuration_only",
+  });
+  expect(health.headers()["x-frame-options"]).toBe("DENY");
+  expect(health.headers()["cache-control"]).toContain("no-store");
   const r = await request.get("/api/opportunities", {
     headers: { "oai-authenticated-user-id": "forged-owner" },
   });

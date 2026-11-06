@@ -42,4 +42,20 @@ describe("environment boundary", () => {
     expect(configuration()).toBeNull();
     expect(setupIssues().sort()).toEqual(["OWNER_AUTH_USER_ID", "OWNER_EMAIL"]);
   });
+  it("rejects public HTTP origins and privileged Supabase keys", () => {
+    set({ APP_URL: "http://tracker.example.test" });
+    expect(setupIssues()).toContain("APP_URL");
+    const payload = Buffer.from(
+      JSON.stringify({ role: "service_role" }),
+    ).toString("base64url");
+    for (const key of [
+      "sb_secret_synthetic-do-not-use",
+      " sb_secret_synthetic ",
+      "eyJhbGciOiJIUzI1NiJ9." + payload + ".synthetic",
+    ]) {
+      set({ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: key });
+      expect(configuration()).toBeNull();
+      expect(setupIssues()).toContain("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY");
+    }
+  });
 });

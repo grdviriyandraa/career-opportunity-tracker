@@ -26,7 +26,8 @@ export type ExportRow = Record<string, unknown>;
 export type ExportData = Record<ExportTable, ExportRow[]>;
 export const EXPORT_PAGE_SIZE = 500;
 export const EXPORT_TABLE_LIMIT = 50_000;
-export const EXPORT_BYTE_LIMIT = 16 * 1024 * 1024;
+// Leave room below the function response payload ceiling; reject before sending.
+export const EXPORT_BYTE_LIMIT = 4 * 1024 * 1024;
 const REQUEST_LIMIT = 300;
 
 export class ExportError extends Error {

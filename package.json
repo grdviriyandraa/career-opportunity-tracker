@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=22.13"
+    "node": "24.x"
   },
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0",
@@ -14,7 +14,8 @@
     "test": "npm run build:mcp && vitest run",
     "test:e2e": "playwright test",
     "test:e2e:core": "playwright test --config playwright.core.config.ts",
-    "build:mcp": "tsc -p tools/tracker-mcp/tsconfig.json"
+    "build:mcp": "tsc -p tools/tracker-mcp/tsconfig.json",
+    "deploy:check": "node scripts/deploy-check.mjs"
   },
   "dependencies": {
     "@js-temporal/polyfill": "0.5.1",

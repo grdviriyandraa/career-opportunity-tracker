@@ -11,7 +11,13 @@ export async function POST(
     const db = await supabase();
     const { action } = await params;
     if (action === "logout") {
-      await db.auth.signOut({ scope: "local" });
+      const { error } = await db.auth.signOut({ scope: "local" });
+      if (error)
+        throw new HttpError(
+          503,
+          "LOGOUT_UNAVAILABLE",
+          "Sesi belum dapat diakhiri. Coba kembali.",
+        );
       return Response.json({ ok: true });
     }
     const input = z

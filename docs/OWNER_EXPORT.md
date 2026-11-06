@@ -18,7 +18,7 @@ Pembacaan memakai publishable client dengan cookie owner, RLS existing dan filte
 
 Pembacaan **bertahap, bukan snapshot transaksi atomik**. Edit bersamaan yang mempertahankan jumlah baris masih mungkin tidak terdeteksi. Hindari perubahan selama ekspor. Manifest menyimpan batas ini, waktu mulai/selesai dan status count verification. Checksum memeriksa integritas file, bukan konsistensi snapshot database atau keaslian penulis.
 
-Batas: 500 baris per permintaan, 50.000 per tabel, 300 permintaan halaman, 16 MiB JSON akhir, deadline pembacaan database 60 detik. Tabel ber-ID memakai keyset UUID. `research_identities` memakai offset terurut pada `(source_system, external_id)` menurut collation database, sehingga teks impor tidak disisipkan ke ekspresi filter PostgREST.
+Batas untuk hosting Vercel: 500 baris per permintaan, 50.000 per tabel, 300 permintaan halaman, **4 MiB JSON akhir**, deadline pembacaan database 45 detik dalam budget route 60 detik. Data lebih besar ditolak sebelum attachment dikirim; gunakan jalur backup database terpisah, bukan memotong history. Tabel ber-ID memakai keyset UUID. `research_identities` memakai offset terurut pada `(source_system, external_id)` menurut collation database, sehingga teks impor tidak disisipkan ke ekspresi filter PostgREST.
 
 `POST /api/export` memerlukan Origin canonical aplikasi dan cookie owner. GET, bearer agent, header identitas, tanpa sesi dan origin lain tidak menyediakan ekspor. Respons sukses/error memakai `Cache-Control: private, no-store`; sukses berupa attachment JSON dengan `nosniff`. Settings menyediakan loading, pencegahan klik ganda dan error/retry.
 

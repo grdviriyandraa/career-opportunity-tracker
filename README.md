@@ -6,7 +6,7 @@ Aplikasi pribadi Bahasa Indonesia untuk menyimpan peluang Jobs, Bootcamps dan Co
 
 ## Menjalankan
 
-Prasyarat: Node.js >=22.13 (diuji 24.22.1), npm. Gunakan checkout existing; cloud task sudah terisolasi dan tidak perlu worktree baru.
+Prasyarat: Node.js **24.x** (diuji 24.22.1; `.nvmrc`), npm. Gunakan checkout existing; cloud task sudah terisolasi dan tidak perlu worktree baru.
 
 ```sh
 cd /workspace/career-opportunity-tracker
@@ -77,6 +77,8 @@ Jika Chromium sistem sudah tersedia, gunakan `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PAT
 Capture tidak mengambil URL sumber. Draft tetap tersimpan dan diberi `manual_required`; tidak ada fetcher rentan SSRF atau klaim ekstraksi berhasil. URL kanonik menghapus parameter tracking yang dikenal, mempertahankan job IDs. Field personal tidak ditimpa duplicate capture. Applied memerlukan tanggal aktual; klik link tidak mengubah progres. Milestone hanya agenda internal dan tidak mempublikasikan event Google. Outbox tersimpan durable tetapi blocked sampai worker integrasi diimplementasikan.
 
 ## Operasi dan privasi
+
+Target hosting dipilih Vercel Hobby. Konfigurasi build dan preflight tersedia; kesiapan penggunaan live masih memerlukan signup ditutup, origin HTTPS tujuan dan verifikasi OTP/sesi owner. Ikuti [panduan deploy Vercel dan gate aktual](docs/VERCEL_DEPLOYMENT.md). Environment cloud development tidak perlu dipublikasikan ulang.
 
 Stop dev/start dengan Ctrl-C; proses harus dijalankan ulang pada task baru. Database berada di Supabase, bukan snapshot filesystem cloud. Tidak ada backup terjadwal atau restore rehearsal yang diklaim; jangan pakai untuk satu-satunya salinan data penting sebelum WP05 selesai.
 

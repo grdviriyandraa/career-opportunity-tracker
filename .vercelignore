@@ -1,0 +1,22 @@
+# Keep local credentials and historical handoffs out of CLI upload context.
+.git/
+.env*
+.private/
+.agents/
+node_modules/
+.next/
+test-results/
+playwright-report/
+coverage/
+reference_partial_source/
+docs/
+examples/
+templates/
+supabase/
+*.md
+*.zip
+*.csv
+*.xlsx
+PACKAGE_MANIFEST.json
+skills-lock.json
+tools/tracker-mcp/dist/

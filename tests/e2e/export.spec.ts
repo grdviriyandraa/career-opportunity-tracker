@@ -2,6 +2,15 @@ import { test, expect } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 import { exportHash, exportTables } from "../../lib/owner-export";
 
+function expectPrivateNoStore(headers: Record<string, string>) {
+  const directives = headers["cache-control"]
+    .split(",")
+    .map((value) => value.trim());
+  expect(directives).toEqual(expect.arrayContaining(["private", "no-store"]));
+  expect(directives).not.toContain("public");
+  expect(directives.some((value) => value.startsWith("s-maxage"))).toBe(false);
+}
+
 test("owner downloads full available data; bearer, spoofed and cross-origin exports are denied", async ({
   page,
   request,
@@ -11,7 +20,7 @@ test("owner downloads full available data; bearer, spoofed and cross-origin expo
     headers: { Origin: origin, "oai-authenticated-user-id": "forged-owner" },
   });
   expect(unauth.status()).toBe(401);
-  expect(unauth.headers()["cache-control"]).toBe("private, no-store");
+  expectPrivateNoStore(unauth.headers());
   expect(unauth.headers()["content-disposition"]).toBeUndefined();
   expect((await request.get("/api/export")).status()).toBe(405);
 
@@ -45,7 +54,7 @@ test("owner downloads full available data; bearer, spoofed and cross-origin expo
       return result;
     }),
   ]);
-  expect(response.headers()["cache-control"]).toBe("private, no-store");
+  expectPrivateNoStore(response.headers());
   expect(response.headers()["x-content-type-options"]).toBe("nosniff");
   expect(download.suggestedFilename()).toMatch(/^career-tracker-.*\.json$/);
   await download.saveAs(

@@ -2,6 +2,9 @@ import { loadOwnerExport } from "@/lib/owner-export-server";
 import { ExportError } from "@/lib/owner-export";
 import { checkOrigin, HttpError, owner, respond } from "@/lib/server";
 
+export const runtime = "nodejs";
+export const maxDuration = 60;
+
 export async function POST(req: Request) {
   const response = await respond(async () => {
     checkOrigin(req);

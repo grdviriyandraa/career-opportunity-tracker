@@ -8,7 +8,8 @@ export async function loadOwnerExport(
   db: SupabaseClient<Database>,
   ownerId: string,
 ) {
-  const signal = AbortSignal.timeout(60_000);
+  // Reserve validation/serialization time within the 60-second route budget.
+  const signal = AbortSignal.timeout(45_000);
   return createOwnerExport(
     {
       count: async (table) => {

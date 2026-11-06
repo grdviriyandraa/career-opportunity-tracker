@@ -23,6 +23,14 @@ jobs:
           umask 022
           npm run test
       - run: npm run build
+      - name: Configuration-only deployment preflight (synthetic)
+        run: npm run deploy:check -- --config-only
+        env:
+          APP_URL: https://tracker.example.test
+          NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_synthetic_public_key_only
+          OWNER_AUTH_USER_ID: 00000000-0000-4000-8000-000000000001
+          OWNER_EMAIL: owner@example.test
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
       - run: npm run test:e2e:core
