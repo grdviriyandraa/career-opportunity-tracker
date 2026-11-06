@@ -11,6 +11,7 @@ export async function deploymentPreflight(
 ) {
   const issues = deploymentConfigIssues(input);
   let authCheck = "not_checked";
+  let publicSignup = "not_checked";
   const parsed = configurationSchema.safeParse(input);
   if (!configOnly && !issues.length && parsed.success) {
     try {
@@ -32,7 +33,10 @@ export async function deploymentPreflight(
         mailer_autoconfirm?: unknown;
         external?: { email?: unknown; anonymous_users?: unknown };
       };
-      if (s.disable_signup !== true) issues.push("PUBLIC_SIGNUP_NOT_DISABLED");
+      if (typeof s.disable_signup !== "boolean") {
+        publicSignup = "unknown";
+        issues.push("AUTH_SETTINGS_SCHEMA_INVALID");
+      } else publicSignup = s.disable_signup ? "disabled" : "enabled";
       if (s.external?.email !== true) issues.push("EMAIL_AUTH_NOT_ENABLED");
       if (s.mailer_autoconfirm !== false)
         issues.push("EMAIL_CONFIRMATION_NOT_REQUIRED");
@@ -50,6 +54,8 @@ export async function deploymentPreflight(
       ? "configuration_only"
       : "configuration_and_public_auth_settings",
     auth_settings: authCheck,
+    public_signup_policy: "allowed",
+    public_signup: publicSignup,
     issues,
     release_decision: "manual_acceptance_required",
     manual_checks_required: [

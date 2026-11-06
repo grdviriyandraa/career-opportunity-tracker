@@ -10,7 +10,7 @@ Project development, publishable key dan email owner sudah dipulihkan ke `.env.l
 - OWNER_AUTH_USER_ID: UUID akun owner yang sudah diprovision.
 - OWNER_EMAIL: email owner untuk OTP.
 
-Public signup masih aktif dan perlu dinonaktifkan di Dashboard. Periksa template Magic Link agar memuat `{{ .Token }}`, lalu verifikasi delivery kode dan sesi login melalui website. Satu permintaan OTP sudah diterima HTTP 200; hasil itu belum membuktikan login penuh. Jangan kirim nilai secret, OTP atau tautan login di chat. Tidak perlu service-role key untuk CRUD website.
+Public signup boleh tetap aktif sesuai keputusan owner; akses tracker tetap dibatasi ke UUID owner existing. Periksa template Magic Link agar memuat `{{ .Token }}`, lalu verifikasi delivery kode dan sesi login melalui website. Satu permintaan OTP sudah diterima HTTP 200; hasil itu belum membuktikan login penuh. Jangan kirim nilai secret, OTP atau tautan login di chat. Tidak perlu service-role key untuk CRUD website.
 
 Runtime terbaru hanya menyediakan binding OWNER_AUTH_USER_ID. Konfigurasi aplikasi lainnya ada dalam file lokal yang di-ignore; file lokal dan OAuth tidak dijamin bertahan pada instance baru. Policy runtime sudah enforced dengan domain yang benar; environment tidak dipublikasikan ulang.
 

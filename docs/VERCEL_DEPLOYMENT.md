@@ -6,7 +6,7 @@ Target yang dipilih owner: Vercel Hobby untuk penggunaan pribadi. Model lokal, H
 
 - Owner Auth terkonfirmasi, tidak dihapus/diblokir, dan cocok dengan satu profile owner.
 - Keempat file migrasi lokal cocok dengan versi dan SHA-256 history hosted: core `20261105143738`, research `20261105143833`, agent_api `20261105154620`, lifecycle `20261105165019`. Jangan replay migrasi atau mengubah metadata history.
-- Public Auth settings HTTP200: email aktif, autoconfirm false, anonymous auth false, **disable_signup false**. Public signup perlu dinonaktifkan melalui Supabase Dashboard sebelum rilis owner-only.
+- Public Auth settings HTTP200: email aktif, autoconfirm false, anonymous auth false, **disable_signup false**. Owner pada 6 November 2026 secara eksplisit mengizinkan public signup tetap aktif; ini bukan blocker deploy. Aplikasi tetap membatasi akses tracker ke UUID owner existing dan tidak menyediakan provisioning tracker multi-user.
 - Permintaan OTP sebelumnya diterima, tetapi delivery kode, template numerik, verifyOtp/sesi dan CRUD/export/logout menggunakan sesi owner hosted belum diverifikasi.
 - Konfigurasi lokal memakai localhost; hanya OWNER_AUTH_USER_ID terikat ke runtime cloud. Konfigurasi Vercel belum dipasang dan URL deploy belum ditentukan. Pada 6 November 2026 owner mengonfirmasi project Vercel belum dibuat.
 - CI pada `8a93dfa` berhasil; lihat release evidence untuk validasi kelanjutan ini. Tidak ada project/deployment Vercel yang dibuat dari audit ini.
@@ -29,7 +29,7 @@ Dokumentasi Next.js terpasang dan Supabase SSR terkini sudah dibaca. URL dokumen
 2. Di pengaturan environment Vercel, pasang lima variabel dari konfigurasi yang sudah ada melalui UI privat: APP_URL, NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, OWNER_AUTH_USER_ID, OWNER_EMAIL. Jangan menaruh service-role/secret key pada variabel publik. Jangan kirim key, email OTP atau link login lewat chat.
 3. APP_URL harus origin HTTPS **persis yang dipakai browser**, tanpa path/query/credential. Atur Preview dan Production secara terpisah; jangan memakai origin Production untuk membuka Preview. Gunakan alias branch yang stabil untuk Preview atau URL exact deployment yang ditetapkan operator. App menolak mutation dari origin lain; tidak memakai header Host/X-Forwarded-Host sebagai identitas yang dipercaya.
 4. Pertahankan `AI_PROVIDER=disabled` dan `INTEGRATION_WRITES_ENABLED=false`. Tidak perlu memindahkan HTTP_PROXY/CA dari cloud development ke Vercel. Tidak perlu key admin/service-role untuk CRUD website.
-5. Nonaktifkan public signup di Supabase Dashboard. Pastikan akun owner existing tetap tersedia dan template Magic Link memuat `{{ .Token }}`. Website memakai kode email, bukan callback 127.0.0.1. Atur Site URL Supabase sesuai origin tujuan; jangan mengaktifkan signup demi memperbaiki login.
+5. Public signup boleh aktif sesuai keputusan owner. Pastikan akun owner existing tetap tersedia dan template Magic Link memuat `{{ .Token }}`. Website memakai kode email, bukan callback 127.0.0.1. Atur Site URL Supabase sesuai origin tujuan. Akun Auth baru tidak otomatis mendapat profile atau akses tracker; RLS/UUID owner tidak diubah.
 6. Preview terbatas dapat dipakai untuk smoke owner setelah otorisasi deploy dan konfigurasi. Pertahankan perlindungan akses Preview dari Vercel. Periksa pengaturan Git auto-deployment sebelum menghubungkan repository; push branch bukan otorisasi untuk merge/merilis Production.
 
 ## Preflight tanpa write
@@ -48,7 +48,7 @@ node --env-file=.env.local scripts/deploy-check.mjs
 
 Pada managed cloud Node 24, tambahkan `NODE_USE_ENV_PROXY=1` agar mengikuti proxy/CA existing. File lokal dengan APP_URL localhost sengaja menghasilkan blocked untuk deploy. Jangan mengganti file lokal menjadi domain kandidat hanya untuk meloloskan pemeriksaan. `--config-only` memeriksa format saja dan tidak menyentuh jaringan; CI memakai data sintetis.
 
-Exit0 berarti **pemeriksaan otomatis yang dipilih lulus**, bukan persetujuan rilis. Exit1 berarti konfigurasi/Auth settings menghalangi; exit2 untuk argumen salah. Output hanya nama field/kode alasan, tanpa nilainya. Probe remote hanya GET public Auth settings, redirect ditolak, timeout 15 detik. Tidak ada email, login, token mint, migrasi atau domain write. Format publishable/legacy anon diperiksa; validasi bentuk JWT bukan pemeriksaan signature. Probe juga tidak dapat membuktikan sesi owner.
+Exit0 berarti **pemeriksaan otomatis yang dipilih lulus**, bukan persetujuan rilis. Exit1 berarti konfigurasi/Auth settings menghalangi; exit2 untuk argumen salah. Output hanya nama field/kode alasan, tanpa nilainya. Probe remote hanya GET public Auth settings, redirect ditolak, timeout 15 detik. Tidak ada email, login, token mint, migrasi atau domain write. Format publishable/legacy anon diperiksa; validasi bentuk JWT bukan pemeriksaan signature. Probe juga tidak dapat membuktikan sesi owner. Public signup dicatat sebagai enabled/disabled dan diterima; data settings yang hilang/rusak tetap menolak preflight. Anonymous login tetap nonaktif, email provider aktif dan email confirmation tetap diperlukan.
 
 ## Smoke dan gate penggunaan harian
 

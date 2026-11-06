@@ -40,7 +40,19 @@ describe("deployment preflight", () => {
       cache: "no-store",
     });
   });
-  it("blocks signup, anonymous auth, missing email provider and autoconfirm", async () => {
+  it("allows public signup while still requiring live owner acceptance", async () => {
+    const report = await deploymentPreflight(config, async () =>
+      Response.json({ ...settings, disable_signup: false }),
+    );
+    expect(report).toMatchObject({
+      automated_checks: "passed",
+      public_signup_policy: "allowed",
+      public_signup: "enabled",
+      release_decision: "manual_acceptance_required",
+    });
+    expect(report.issues).toEqual([]);
+  });
+  it("blocks anonymous auth, missing email provider and autoconfirm", async () => {
     const report = await deploymentPreflight(config, async () =>
       Response.json({
         disable_signup: false,
@@ -49,7 +61,6 @@ describe("deployment preflight", () => {
       }),
     );
     expect(report.issues).toEqual([
-      "PUBLIC_SIGNUP_NOT_DISABLED",
       "EMAIL_AUTH_NOT_ENABLED",
       "EMAIL_CONFIRMATION_NOT_REQUIRED",
       "ANONYMOUS_AUTH_NOT_DISABLED",

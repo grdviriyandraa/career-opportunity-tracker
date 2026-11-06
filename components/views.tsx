@@ -32,8 +32,8 @@ export function Setup() {
             lalu isi konfigurasi Supabase dan owner.
           </li>
           <li>
-            Jalankan migrasi SQL, provision satu akun owner, dan nonaktifkan
-            public signup.
+            Jalankan migrasi SQL yang belum diterapkan dan provision satu akun
+            owner.
           </li>
           <li>
             Masukkan UUID owner ke tabel profiles melalui SQL editor. Atur

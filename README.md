@@ -21,7 +21,7 @@ Jangan overwrite `.env.local` yang sudah ada. Aplikasi menampilkan panduan setup
 
 1. Buat project Supabase development terpisah dari produksi.
 2. Jalankan semua file SQL dalam `supabase/migrations/` sesuai urutan nama melalui SQL editor/admin migration connection; lewati migrasi yang sudah diterapkan. Jangan memasukkan admin/database credentials ke browser.
-3. Provision satu akun owner dari Supabase Dashboard. Nonaktifkan public signup. Catat UUID akun yang terverifikasi.
+3. Provision satu akun owner dari Supabase Dashboard. Catat UUID akun yang terverifikasi. Public signup boleh aktif sesuai keputusan owner; akses tracker tetap khusus UUID owner.
 4. Dari SQL editor, provision profile (ganti placeholder dengan UUID akun tersebut):
 
    ```sql
@@ -34,7 +34,7 @@ Jangan overwrite `.env.local` yang sudah ada. Aplikasi menampilkan panduan setup
 
 Supabase perlu dapat dijangkau melalui HTTPS oleh server. Dalam cloud dengan allowlist, tambahkan hostname project yang benar di environment settings setelah project dipilih. Tidak diperlukan akses Google untuk alur inti. Jangan kirim secrets di chat, commit `.env.local`, atau memakai database produksi pada tests.
 
-Checkpoint hosted 5 November: core, research, agent API, milestone lifecycle dan singleton profile owner sudah diterapkan serta diverifikasi. Nama file mengikuti history MCP (`20261105143738_core`, `20261105143833_research`, `20261105154620_agent_api`, `20261105165019_milestone_lifecycle`); isi SQL cocok dengan checksum yang disetujui. Jangan menerapkan ulang migrasi pada project existing. OTP request sudah diterima, tetapi delivery/session dan penutupan public signup masih menjadi gate. Detail di [SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md). Pada managed cloud Node 24, gunakan `NODE_USE_ENV_PROXY=1 npm run dev` atau `NODE_USE_ENV_PROXY=1 npm run start` agar fetch mengikuti proxy dan CA yang diwariskan; tidak perlu mengubah policy environment.
+Checkpoint hosted 5 November: core, research, agent API, milestone lifecycle dan singleton profile owner sudah diterapkan serta diverifikasi. Nama file mengikuti history MCP (`20261105143738_core`, `20261105143833_research`, `20261105154620_agent_api`, `20261105165019_milestone_lifecycle`); isi SQL cocok dengan checksum yang disetujui. Jangan menerapkan ulang migrasi pada project existing. OTP request sudah diterima, tetapi delivery/session dan konfigurasi origin tujuan masih menjadi gate. Detail di [SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md). Pada managed cloud Node 24, gunakan `NODE_USE_ENV_PROXY=1 npm run dev` atau `NODE_USE_ENV_PROXY=1 npm run start` agar fetch mengikuti proxy dan CA yang diwariskan; tidak perlu mengubah policy environment.
 
 ## Verifikasi
 
@@ -78,7 +78,7 @@ Capture tidak mengambil URL sumber. Draft tetap tersimpan dan diberi `manual_req
 
 ## Operasi dan privasi
 
-Target hosting dipilih Vercel Hobby. Konfigurasi build dan preflight tersedia; kesiapan penggunaan live masih memerlukan signup ditutup, origin HTTPS tujuan dan verifikasi OTP/sesi owner. Ikuti [panduan deploy Vercel dan gate aktual](docs/VERCEL_DEPLOYMENT.md). Environment cloud development tidak perlu dipublikasikan ulang.
+Target hosting dipilih Vercel Hobby. Konfigurasi build dan preflight tersedia; kesiapan penggunaan live masih memerlukan origin HTTPS tujuan dan verifikasi OTP/sesi owner. Public signup boleh aktif sesuai keputusan owner; akun baru tidak otomatis mendapat akses tracker. Ikuti [panduan deploy Vercel dan gate aktual](docs/VERCEL_DEPLOYMENT.md). Environment cloud development tidak perlu dipublikasikan ulang.
 
 Stop dev/start dengan Ctrl-C; proses harus dijalankan ulang pada task baru. Database berada di Supabase, bukan snapshot filesystem cloud. Tidak ada backup terjadwal atau restore rehearsal yang diklaim; jangan pakai untuk satu-satunya salinan data penting sebelum WP05 selesai.
 
